@@ -1,0 +1,88 @@
+/* ─── Tailwind ──────────────────────────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────────────────────────────── */
+/* RGB channel tuples — required by Tailwind's opacity modifier system          */
+/* e.g. text-ink/50 → color: rgb(var(--ink-rgb) / 0.5)                         */
+:root {
+  --canvas-rgb: 240 240 240;   /* #F0F0F0 */
+  --ink-rgb:    17 17 17;      /* #111111 */
+  --muted-rgb:  136 136 136;   /* #888888 */
+  --line-rgb:   204 204 204;   /* #CCCCCC */
+  --canvas:     #F0F0F0;
+  --ink:        #111111;
+  --accent:     #FF5C00;
+}
+
+/* Dark theme — toggled via html.dark class by Header.tsx */
+html.dark {
+  --canvas-rgb: 13 13 13;      /* #0D0D0D */
+  --ink-rgb:    240 240 240;   /* #F0F0F0 */
+  --muted-rgb:  100 100 100;   /* #646464 */
+  --line-rgb:   42 42 42;      /* #2A2A2A */
+  --canvas:     #0D0D0D;
+  --ink:        #F0F0F0;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: rgb(var(--canvas-rgb));
+  color: rgb(var(--ink-rgb));
+  font-family: "Space Mono", monospace;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── Selection ─────────────────────────────────────────────────────────────── */
+::selection { background-color: var(--accent); color: #F0F0F0; }
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: rgb(var(--canvas-rgb)); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 0; }
+
+/* ─── Entrance Animations ───────────────────────────────────────────────────── */
+@keyframes slide-up-fade {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.anim-up    { animation: slide-up-fade  0.85s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-left  { animation: slide-in-left  0.7s  cubic-bezier(0.22,1,0.36,1) both; }
+.anim-right { animation: slide-in-right 0.7s  cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade  { animation: fade-in        0.8s  ease both; }
+.marquee-track { animation: marquee 36s linear infinite; }
+
+/* ─── Utilities ─────────────────────────────────────────────────────────────── */
+@layer utilities {
+  .font-display { font-family: "ClashDisplay", "Sora", system-ui, sans-serif; }
+  .font-mono    { font-family: "Space Mono", "JetBrains Mono", monospace; }
+  .btn-glow:hover { box-shadow: 0 6px 28px -4px rgba(255, 92, 0, 0.45); }
+}
