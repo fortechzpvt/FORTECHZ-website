@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3001;
 // Allow requests from your GitHub Pages site and localhost during dev
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:3001",
   "https://kethnulasiriwardana.github.io",
 ];
 
