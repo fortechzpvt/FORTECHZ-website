@@ -16,17 +16,36 @@ const selectCls =
   "font-mono text-sm text-ink " +
   "px-4 py-3.5 transition-colors duration-200 cursor-pointer";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name:"", email:"", company:"", service:"", budget:"", message:"" });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Something went wrong.");
+      setSubmitted(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to send. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -127,13 +146,18 @@ export default function ContactPage() {
                   className={inputCls + " resize-none"} />
               </div>
 
+              {error && (
+                <p className="font-mono text-xs text-red-400 tracking-[0.1em]">{error}</p>
+              )}
+
               <button
                 type="submit"
+                disabled={loading}
                 className="w-full sm:w-auto font-mono text-xs tracking-[0.14em] text-canvas uppercase
                            px-8 py-4 bg-accent hover:bg-accent/90 btn-glow
-                           transition-all duration-300"
+                           transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Send enquiry →
+                {loading ? "Sending…" : "Send enquiry →"}
               </button>
             </form>
           )}
