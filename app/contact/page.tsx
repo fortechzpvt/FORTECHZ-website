@@ -16,7 +16,7 @@ const selectCls =
   "font-mono text-sm text-ink " +
   "px-4 py-3.5 transition-colors duration-200 cursor-pointer";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://fortechz-website.onrender.com";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
