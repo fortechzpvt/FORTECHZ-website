@@ -13,15 +13,8 @@ const allowedOrigins = [
   "https://kethnulasiriwardana.github.io",
 ];
 
-app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || allowedOrigins.some((o) => origin.startsWith(o))) {
-      cb(null, true);
-    } else {
-      cb(new Error("Not allowed by CORS"));
-    }
-  },
-}));
+// Replace lines 10 through 24 with just this one line:
+app.use(cors({ origin: '*' }));
 
 app.use(express.json());
 
