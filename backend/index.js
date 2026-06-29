@@ -6,24 +6,21 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Allow requests from your GitHub Pages site and localhost during dev
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "https://kethnulasiriwardana.github.io",
-];
-
-// Replace lines 10 through 24 with just this one line:
+// Globally allow requests from any frontend origin (Fixes CORS once and for all)
 app.use(cors({ origin: '*' }));
 
 app.use(express.json());
 
+// Upgraded Transporter: Configured for Explicit TLS submission via IPv4 to bypass Render limitations
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // use TLS/STARTTLS
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
   },
+  family: 4 // Forces Node.js to use IPv4 instead of hitting unreachable IPv6 networks
 });
 
 app.post("/api/contact", async (req, res) => {
