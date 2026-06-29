@@ -18,16 +18,18 @@ app.use(cors({ origin: '*' }));
 
 app.use(express.json());
 
-// Upgraded Transporter: Configured for Explicit TLS submission via IPv4 to bypass Render limitations
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // use TLS/STARTTLS
+  host: "173.194.76.108", // Direct IPv4 address for smtp.gmail.com
+  port: 465,
+  secure: true, // Use SSL/TLS directly
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
   },
-  family: 4 // Forces Node.js to use IPv4 instead of hitting unreachable IPv6 networks
+  tls: {
+    rejectUnauthorized: false, // Prevents SSL connection termination on proxy networks
+    servername: "smtp.gmail.com" // Verifies the certificate matches Gmail safely
+  }
 });
 
 app.post("/api/contact", async (req, res) => {
