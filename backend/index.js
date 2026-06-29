@@ -20,8 +20,8 @@ app.use(express.json());
 
 const transporter = nodemailer.createTransport({
   host: "173.194.76.108", // Direct IPv4 address for smtp.gmail.com
-  port: 465,
-  secure: true, // Use SSL/TLS directly
+  port: 587,
+  secure: false, // Use SSL/TLS directly
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
