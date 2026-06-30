@@ -7,23 +7,24 @@
 /* RGB channel tuples — required by Tailwind's opacity modifier system          */
 /* e.g. text-ink/50 → color: rgb(var(--ink-rgb) / 0.5)                         */
 :root {
-  --canvas-rgb: 240 240 240;   /* #F0F0F0 */
-  --ink-rgb:    17 17 17;      /* #111111 */
-  --muted-rgb:  136 136 136;   /* #888888 */
-  --line-rgb:   204 204 204;   /* #CCCCCC */
-  --canvas:     #F0F0F0;
-  --ink:        #111111;
-  --accent:     #FF5C00;
+  --canvas-rgb: 238 245 255;   /* #EEF5FF — ice-blue white */
+  --ink-rgb:    6 14 28;       /* #060E1C — deep navy */
+  --muted-rgb:  74 106 138;    /* #4A6A8A */
+  --line-rgb:   196 217 240;   /* #C4D9F0 */
+  --canvas:     #EEF5FF;
+  --ink:        #060E1C;
+  --accent:     #0C7EFF;       /* electric cobalt blue */
 }
 
 /* Dark theme — toggled via html.dark class by Header.tsx */
 html.dark {
-  --canvas-rgb: 13 13 13;      /* #0D0D0D */
-  --ink-rgb:    240 240 240;   /* #F0F0F0 */
-  --muted-rgb:  100 100 100;   /* #646464 */
-  --line-rgb:   42 42 42;      /* #2A2A2A */
-  --canvas:     #0D0D0D;
-  --ink:        #F0F0F0;
+  --canvas-rgb: 3 9 18;        /* #030912 — near-black space blue */
+  --ink-rgb:    208 232 255;   /* #D0E8FF — cold blue-white */
+  --muted-rgb:  42 74 107;     /* #2A4A6B */
+  --line-rgb:   13 30 53;      /* #0D1E35 */
+  --canvas:     #030912;
+  --ink:        #D0E8FF;
+  --accent:     #0C7EFF;       /* electric cobalt blue */
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────────── */
@@ -45,7 +46,7 @@ body {
 }
 
 /* ─── Selection ─────────────────────────────────────────────────────────────── */
-::selection { background-color: var(--accent); color: #F0F0F0; }
+::selection { background-color: var(--accent); color: #EEF5FF; }
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 3px; }
@@ -84,5 +85,5 @@ body {
 @layer utilities {
   .font-display { font-family: "ClashDisplay", "Sora", system-ui, sans-serif; }
   .font-mono    { font-family: "Space Mono", "JetBrains Mono", monospace; }
-  .btn-glow:hover { box-shadow: 0 6px 28px -4px rgba(255, 92, 0, 0.45); }
+  .btn-glow:hover { box-shadow: 0 6px 28px -4px rgba(12, 126, 255, 0.45); }
 }
