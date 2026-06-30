@@ -19,17 +19,16 @@ app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 const transporter = nodemailer.createTransport({
-  host: "173.194.76.108", // Direct IPv4 address for smtp.gmail.com
+  host: "smtp.gmail.com", // Direct IPv4 address for smtp.gmail.com
   port: 587,
   secure: false, // Use SSL/TLS directly
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
   },
-  tls: {
-    rejectUnauthorized: false, // Prevents SSL connection termination on proxy networks
-    servername: "smtp.gmail.com" // Verifies the certificate matches Gmail safely
-  }
+    connectionTimeout: 10000, 
+    greetingTimeout: 10000,
+    socketTimeout: 10000
 });
 
 app.post("/api/contact", async (req, res) => {
