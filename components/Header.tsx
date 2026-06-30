@@ -57,8 +57,7 @@ export default function Header() {
     setMounted(true);
     // Read theme preference from localStorage
     const saved = localStorage.getItem("ftchz-theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const dark = saved === "dark" || (!saved && prefersDark);
+    const dark = saved ? saved === "dark" : true; // default to dark (black-blue theme)
     setIsDark(dark);
     document.documentElement.classList.toggle("dark", dark);
   }, []);
@@ -136,7 +135,7 @@ export default function Header() {
                 onClick={toggleTheme}
                 aria-label={isDark ? "Switch to bright mode" : "Switch to dark mode"}
                 className="flex items-center gap-1.5 px-2.5 py-1.5 border border-ink/15
-                           hover:border-accent text-ink/50 hover:text-ink
+                           hover:border-accent/60 text-ink/50 hover:text-accent
                            transition-all duration-200 rounded-sm"
               >
                 {isDark ? <SunIcon /> : <MoonIcon />}

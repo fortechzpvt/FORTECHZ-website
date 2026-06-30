@@ -1,7 +1,5 @@
 "use client";
 
-const tags = ["Web Systems", "Infrastructure", "API Design"];
-
 export default function LeftPanel() {
   return (
     <div className="flex flex-col justify-between h-full pt-20 pb-16">
@@ -17,7 +15,7 @@ export default function LeftPanel() {
       </div>
 
       {/* Main Content */}
-      <div className="space-y-8">
+      <div className="space-y-10">
         {/* Display Headline */}
         <div className="anim-up" style={{ animationDelay: "0.22s" }}>
           <h1
@@ -26,7 +24,7 @@ export default function LeftPanel() {
           >
             Architecting
             <br />
-            <span className="text-ink/35">Digital</span>
+            <span className="text-accent/60">Digital</span>
             <br />
             Elite
             <br />
@@ -34,56 +32,36 @@ export default function LeftPanel() {
           </h1>
         </div>
 
-        {/* Structural separator */}
-        <div
-          className="flex items-center gap-3 anim-up"
-          style={{ animationDelay: "0.34s" }}
-        >
-          <div className="w-5 h-[1px] bg-ink/25" />
-          <span className="font-mono text-xs text-ink/45 tracking-[0.18em] uppercase">
-            Premium Systems
-          </span>
-        </div>
-
         {/* Glassmorphic Play CTA */}
-        <div className="anim-up" style={{ animationDelay: "0.46s" }}>
+        <div className="anim-up" style={{ animationDelay: "0.38s" }}>
           <button
             type="button"
             className="group flex items-center gap-3.5 pl-1.5 pr-5 py-1.5
-                       border border-ink/14 rounded-full
-                       backdrop-blur-sm bg-white/30
-                       hover:bg-white/55 hover:border-ink/25
+                       border border-accent/20 rounded-full
+                       backdrop-blur-sm bg-accent/5
+                       hover:bg-accent/15 hover:border-accent/40
                        transition-all duration-300 cursor-pointer"
             aria-label="Watch Fortechz case study reel"
           >
             <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110">
               <svg width="9" height="10" viewBox="0 0 9 10" fill="none" aria-hidden="true">
-                <path d="M1.5 1.5L7.5 5L1.5 8.5V1.5Z" fill="#F0F0F0" />
+                <path d="M1.5 1.5L7.5 5L1.5 8.5V1.5Z" fill="#EEF5FF" />
               </svg>
             </div>
             <span className="font-mono text-xs tracking-[0.14em] text-ink uppercase">
               View Case Study
             </span>
-            <div className="w-3 h-[1px] bg-ink/30 group-hover:w-6 transition-all duration-300" />
+            <div className="w-3 h-[1px] bg-accent/40 group-hover:w-6 transition-all duration-300" />
           </button>
         </div>
       </div>
 
-      {/* Tag Cloud */}
+      {/* Bottom accent line */}
       <div
-        className="flex flex-wrap gap-2 anim-up"
-        style={{ animationDelay: "0.58s" }}
-      >
-        {tags.map((tag) => (
-          <span
-            key={tag}
-            className="font-mono text-xs tracking-[0.14em] text-ink/45 uppercase
-                       px-2.5 py-1 border border-ink/12 rounded-sm"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+        className="w-10 h-[2px] bg-accent anim-up"
+        style={{ animationDelay: "0.5s" }}
+        aria-hidden="true"
+      />
     </div>
   );
 }

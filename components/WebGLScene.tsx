@@ -59,49 +59,51 @@ export default function WebGLScene({ scrollProgress }: WebGLSceneProps) {
     );
     camera.position.set(0, 0, 7.5);
 
-    // ── Studio Lighting (replaces env map) ────────────────────────────────────
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    // ── Studio Lighting (blue-black theme) ───────────────────────────────────
+    scene.add(new THREE.AmbientLight(0x0a1a3a, 1.2));
 
-    const key = new THREE.DirectionalLight(0xfff8f0, 4.0);
+    const key = new THREE.DirectionalLight(0x4499ff, 5.0);
     key.position.set(6, 9, 5);
     key.castShadow = true;
     scene.add(key);
 
-    const fill = new THREE.DirectionalLight(0xb8c4ff, 1.0);
+    const fill = new THREE.DirectionalLight(0x0055ff, 2.0);
     fill.position.set(-8, -4, -5);
     scene.add(fill);
 
-    const rim = new THREE.PointLight(0xffffff, 2.5);
+    const rim = new THREE.PointLight(0x88ccff, 3.5);
     rim.position.set(-5, 5, -7);
     scene.add(rim);
 
-    const kick = new THREE.PointLight(0xe8e8ff, 1.2);
+    const kick = new THREE.PointLight(0x0099ff, 2.0);
     kick.position.set(0, -4, 3);
     scene.add(kick);
 
-    const top = new THREE.PointLight(0xffffff, 1.5);
+    const top = new THREE.PointLight(0xaaddff, 2.0);
     top.position.set(0, 8, 0);
     scene.add(top);
 
-    // ── Materials ─────────────────────────────────────────────────────────────
+    // ── Materials (deep blue metallic) ────────────────────────────────────────
     const porcelainMat = new THREE.MeshPhysicalMaterial({
-      color: 0xf5f5f5,
-      roughness: 0.06,
-      metalness: 0.05,
+      color: 0x0a2255,
+      roughness: 0.08,
+      metalness: 0.85,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.05,
+      clearcoatRoughness: 0.04,
+      iridescence: 0.6,
+      iridescenceIOR: 1.6,
     });
 
     const chromeMat = new THREE.MeshPhysicalMaterial({
-      color: 0xa8a8a8,
+      color: 0x1a4daa,
       roughness: 0.02,
-      metalness: 0.95,
+      metalness: 1.0,
     });
 
     const chromeThinMat = new THREE.MeshPhysicalMaterial({
-      color: 0xc8c8c8,
-      roughness: 0.02,
-      metalness: 0.95,
+      color: 0x0c7eff,
+      roughness: 0.01,
+      metalness: 0.9,
     });
 
     // ── Scene Objects ─────────────────────────────────────────────────────────
