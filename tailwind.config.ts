@@ -14,7 +14,7 @@ export default {
         ink:    "rgb(var(--ink-rgb)    / <alpha-value>)",
         muted:  "rgb(var(--muted-rgb)  / <alpha-value>)",
         line:   "rgb(var(--line-rgb)   / <alpha-value>)",
-        accent: "#FF5C00",
+        accent: "#0C7EFF",
       },
       fontFamily: {
         display: ["ClashDisplay", "Sora", "system-ui", "sans-serif"],
