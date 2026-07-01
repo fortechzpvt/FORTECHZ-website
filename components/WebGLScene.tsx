@@ -59,51 +59,49 @@ export default function WebGLScene({ scrollProgress }: WebGLSceneProps) {
     );
     camera.position.set(0, 0, 7.5);
 
-    // ── Studio Lighting (blue-black theme) ───────────────────────────────────
-    scene.add(new THREE.AmbientLight(0x0a1a3a, 1.2));
+    // ── Studio Lighting (black & white) ──────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-    const key = new THREE.DirectionalLight(0x4499ff, 5.0);
+    const key = new THREE.DirectionalLight(0xffffff, 4.5);
     key.position.set(6, 9, 5);
     key.castShadow = true;
     scene.add(key);
 
-    const fill = new THREE.DirectionalLight(0x0055ff, 2.0);
+    const fill = new THREE.DirectionalLight(0xcccccc, 1.2);
     fill.position.set(-8, -4, -5);
     scene.add(fill);
 
-    const rim = new THREE.PointLight(0x88ccff, 3.5);
+    const rim = new THREE.PointLight(0xffffff, 3.0);
     rim.position.set(-5, 5, -7);
     scene.add(rim);
 
-    const kick = new THREE.PointLight(0x0099ff, 2.0);
+    const kick = new THREE.PointLight(0xaaaaaa, 1.5);
     kick.position.set(0, -4, 3);
     scene.add(kick);
 
-    const top = new THREE.PointLight(0xaaddff, 2.0);
+    const top = new THREE.PointLight(0xffffff, 1.8);
     top.position.set(0, 8, 0);
     scene.add(top);
 
-    // ── Materials (deep blue metallic) ────────────────────────────────────────
+    // ── Materials (black & white) ─────────────────────────────────────────────
     const porcelainMat = new THREE.MeshPhysicalMaterial({
-      color: 0x0a2255,
-      roughness: 0.08,
-      metalness: 0.85,
+      color: 0xb8d8ff,
+      roughness: 0.06,
+      metalness: 0.08,
       clearcoat: 1.0,
       clearcoatRoughness: 0.04,
-      iridescence: 0.6,
-      iridescenceIOR: 1.6,
     });
 
     const chromeMat = new THREE.MeshPhysicalMaterial({
-      color: 0x1a4daa,
+      color: 0x111111,
       roughness: 0.02,
       metalness: 1.0,
     });
 
     const chromeThinMat = new THREE.MeshPhysicalMaterial({
-      color: 0x0c7eff,
+      color: 0x444444,
       roughness: 0.01,
-      metalness: 0.9,
+      metalness: 0.95,
     });
 
     // ── Scene Objects ─────────────────────────────────────────────────────────
@@ -175,7 +173,8 @@ export default function WebGLScene({ scrollProgress }: WebGLSceneProps) {
 
       group.rotation.x = scrollRef.current * 0.3;
       group.rotation.y = t * 0.055 + azimuthOffset;
-      group.position.y = Math.sin(t * 1.4) * 0.15; // float bob
+      group.position.x = 1.5;
+      group.position.y = Math.sin(t * 1.4) * 0.15;
 
       ring1.rotation.y = t * 0.45;
       ring2.rotation.x = -t * 0.3;
