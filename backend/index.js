@@ -15,7 +15,6 @@ const allowedOrigins = [
 // Robust CORS configuration handling regular and preflight (OPTIONS) requests
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman or internal health checks)
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.indexOf(origin) !== -1) {
@@ -29,13 +28,13 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// Explicitly handle browser OPTIONS preflight requests immediately
 app.options("*", cors());
-
 app.use(express.json());
 
 app.post("/api/contact", async (req, res) => {
-  // Destructure phone alongside the rest of your form fields
+  // Debug log: This will show up in your Render Logs so you can verify if the frontend is actually sending the phone number
+  console.log("Incoming Request Body:", req.body);
+
   const { name, email, phone, company, service, budget, message } = req.body;
 
   if (!name || !email || !message) {
@@ -47,7 +46,7 @@ app.post("/api/contact", async (req, res) => {
     return res.status(400).json({ error: "Invalid email address." });
   }
 
-  // HTML template featuring the phone number row if a user inputs one
+  // HTML template featuring the phone number row if a user inputs one (safely checking if it's a non-empty string)
   const htmlContent = `
     <div style="font-family:monospace;max-width:600px;margin:0 auto;color:#1a1a1a;">
       <h2 style="border-bottom:2px solid #e5e5e5;padding-bottom:12px;margin-bottom:24px;">
@@ -62,7 +61,7 @@ app.post("/api/contact", async (req, res) => {
           <td style="padding:8px 0;color:#666;vertical-align:top;">Email</td>
           <td style="padding:8px 0;"><a href="mailto:${escape(email)}" style="color:#0066cc;">${escape(email)}</a></td>
         </tr>
-        ${phone ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Phone</td><td style="padding:8px 0;">${escape(phone)}</td></tr>` : ""}
+        ${phone && String(phone).trim() !== "" ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Phone</td><td style="padding:8px 0;">${escape(phone)}</td></tr>` : ""}
         ${company ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Company</td><td style="padding:8px 0;">${escape(company)}</td></tr>` : ""}
         ${service ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Service</td><td style="padding:8px 0;">${escape(service)}</td></tr>` : ""}
         ${budget ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Budget</td><td style="padding:8px 0;">${escape(budget)}</td></tr>` : ""}
