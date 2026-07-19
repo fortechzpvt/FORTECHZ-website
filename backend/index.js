@@ -5,7 +5,33 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors({ origin: '*' }));
+// Whitelist local development and your exact production domains
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://fortechz.com",
+  "https://www.fortechz.com"
+];
+
+// Robust CORS configuration handling regular and preflight (OPTIONS) requests
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman or internal health checks)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// Explicitly handle browser OPTIONS preflight requests immediately
+app.options("*", cors());
+
 app.use(express.json());
 
 app.post("/api/contact", async (req, res) => {
@@ -46,7 +72,6 @@ app.post("/api/contact", async (req, res) => {
   `;
 
   try {
-    // Making a secure HTTP POST request directly to Resend's API endpoint (Bypasses SMTP completely)
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -54,8 +79,8 @@ app.post("/api/contact", async (req, res) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "onboarding@resend.dev", // Free tier default sending address
-        to: "fortechzpvt@gmail.com",   // Your inbox destination
+        from: "onboarding@resend.dev",
+        to: "fortechzpvt@gmail.com",
         reply_to: email,
         subject: `New Enquiry from ${name}${company ? ` · ${company}` : ""}`,
         html: htmlContent,
