@@ -95,15 +95,26 @@ export default function Header() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 text-ink anim-left" style={{ animationDelay: "0.05s" }}>
-            <FortechzLogoMark />
-            <div className="flex flex-col leading-none">
-              <span className="font-display font-bold text-ink text-[0.85rem] tracking-[-0.04em] uppercase">
-                Fortechz
-              </span>
-              <span className="font-mono text-[0.5rem] text-ink/45 tracking-[0.18em] uppercase mt-0.5">
-                · Systems
-              </span>
-            </div>
+            {mounted ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={isDark ? "/fortechz-wordmark-dark.png" : "/fortechz-wordmark-light.png"}
+                alt="Fortechz"
+                className="h-[20px] w-auto"
+              />
+            ) : (
+              <>
+                <FortechzLogoMark />
+                <div className="flex flex-col leading-none">
+                  <span className="font-display font-bold text-ink text-[0.85rem] tracking-[-0.04em] uppercase">
+                    Fortechz
+                  </span>
+                  <span className="font-mono text-[0.5rem] text-ink/45 tracking-[0.18em] uppercase mt-0.5">
+                    · Systems
+                  </span>
+                </div>
+              </>
+            )}
             <div className="hidden sm:flex items-center gap-1.5 ml-3 px-2 py-1 border border-ink/10 rounded-sm">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70" />
