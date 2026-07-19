@@ -22,7 +22,9 @@ export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ name:"", email:"", company:"", service:"", budget:"", message:"" });
+  
+  // 1. Added 'phone' key into the initial state hook properties tracker
+  const [form, setForm] = useState({ name:"", email:"", phone:"", company:"", service:"", budget:"", message:"" });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -86,7 +88,7 @@ export default function ContactForm() {
                 Thank you for reaching out. A member of the Fortechz team will review your enquiry and respond within one business day.
               </p>
               <button
-                onClick={() => { setSubmitted(false); setForm({ name:"", email:"", company:"", service:"", budget:"", message:"" }); }}
+                onClick={() => { setSubmitted(false); setForm({ name:"", email:"", phone:"", company:"", service:"", budget:"", message:"" }); }}
                 className="font-mono text-xs tracking-[0.14em] text-canvas uppercase px-5 py-3 bg-accent hover:bg-accent/90 btn-glow transition-all duration-200"
               >
                 Send another message
@@ -109,6 +111,15 @@ export default function ContactForm() {
                   <input id="email" name="email" type="email" required value={form.email}
                     onChange={handleChange} placeholder="you@company.com" className={inputCls} />
                 </div>
+              </div>
+
+              {/* 2. Brand New Phone Input Field built directly into the UI layouts */}
+              <div className="space-y-2">
+                <label htmlFor="phone" className="font-mono text-xs tracking-[0.18em] text-ink/40 uppercase block">
+                  Contact Number
+                </label>
+                <input id="phone" name="phone" type="tel" value={form.phone}
+                  onChange={handleChange} placeholder="+94 7X XXX XXXX (optional)" className={inputCls} />
               </div>
 
               <div className="space-y-2">
