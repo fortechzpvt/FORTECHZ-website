@@ -35,7 +35,8 @@ app.options("*", cors());
 app.use(express.json());
 
 app.post("/api/contact", async (req, res) => {
-  const { name, email, company, service, budget, message } = req.body;
+  // Destructure phone alongside the rest of your form fields
+  const { name, email, phone, company, service, budget, message } = req.body;
 
   if (!name || !email || !message) {
     return res.status(400).json({ error: "Name, email and message are required." });
@@ -46,6 +47,7 @@ app.post("/api/contact", async (req, res) => {
     return res.status(400).json({ error: "Invalid email address." });
   }
 
+  // HTML template featuring the phone number row if a user inputs one
   const htmlContent = `
     <div style="font-family:monospace;max-width:600px;margin:0 auto;color:#1a1a1a;">
       <h2 style="border-bottom:2px solid #e5e5e5;padding-bottom:12px;margin-bottom:24px;">
@@ -60,6 +62,7 @@ app.post("/api/contact", async (req, res) => {
           <td style="padding:8px 0;color:#666;vertical-align:top;">Email</td>
           <td style="padding:8px 0;"><a href="mailto:${escape(email)}" style="color:#0066cc;">${escape(email)}</a></td>
         </tr>
+        ${phone ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Phone</td><td style="padding:8px 0;">${escape(phone)}</td></tr>` : ""}
         ${company ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Company</td><td style="padding:8px 0;">${escape(company)}</td></tr>` : ""}
         ${service ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Service</td><td style="padding:8px 0;">${escape(service)}</td></tr>` : ""}
         ${budget ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top;">Budget</td><td style="padding:8px 0;">${escape(budget)}</td></tr>` : ""}
