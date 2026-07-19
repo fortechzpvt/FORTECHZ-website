@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // Required for static exports
   },
+  basePath: '/FORTECHZ-website', // Adds the repository name as the base path for GitHub Pages
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "https://fortechz-website.onrender.com",
   },
