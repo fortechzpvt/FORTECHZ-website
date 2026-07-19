@@ -1,44 +1,63 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Marquee from "@/components/Marquee";
 
 const services = [
   {
     index: "01",
+    slug: "business-website",
     title: "Basic Business Website",
     desc: "A clean, fast, professionally crafted website for your business. Built with performance first principles, optimized for mobile, and designed to convert visitors into clients.",
     features: ["Responsive design", "SEO ready structure", "Contact & enquiry forms", "CMS integration"],
   },
   {
     index: "02",
+    slug: "pos-systems",
     title: "POS Systems",
     desc: "Custom point of sale software tailored to your retail or hospitality operation. Real time inventory, multi terminal support, and sales analytics built in.",
     features: ["Real time inventory tracking", "Multi location support", "Payment gateway integration", "Reporting dashboard"],
   },
   {
     index: "03",
+    slug: "ecommerce-platform",
     title: "Ecommerce Platform",
     desc: "A fully featured online store engineered for scale. From product catalogues to checkout flows, built to handle high traffic without compromise.",
     features: ["Custom storefront design", "Secure payment processing", "Order & fulfilment management", "Customer account portals"],
   },
   {
     index: "04",
+    slug: "web-mobile-development",
     title: "Web & Mobile Development",
     desc: "Cross platform applications that work seamlessly on every device. Whether web, iOS, or Android, we engineer systems that perform at every touchpoint.",
     features: ["React / Next.js web apps", "React Native mobile apps", "API design & integration", "App Store deployment"],
   },
   {
     index: "05",
+    slug: "custom-website-design",
     title: "Custom Website Design & Build",
     desc: "Bespoke digital experiences designed from a blank canvas. Every pixel is intentional, brand aligned, interactive, and built to impress.",
     features: ["Bespoke UI/UX design", "3D & interactive elements", "Brand system integration", "Performance audits"],
   },
   {
     index: "06",
+    slug: "enterprise-software",
     title: "Enterprise Software Systems",
     desc: "Complex, mission critical software for organisations that can't afford downtime. Microservices, cloud native architecture, and 99.99% uptime SLAs.",
     features: ["Cloud infrastructure (AWS/GCP)", "Microservices architecture", "CI/CD pipeline setup", "24/7 monitoring & SLA"],
   },
 ];
+
+export const metadata: Metadata = {
+  title: "Services — Custom Software, POS, Ecommerce & Web Development",
+  description: "Explore Fortechz's services: business websites, POS systems, ecommerce platforms, web & mobile development, custom website design, and enterprise software — built for Sri Lankan and global businesses.",
+  alternates: { canonical: "/services" },
+  openGraph: {
+    title: "Services | Fortechz",
+    description: "Business websites, POS systems, ecommerce platforms, web & mobile apps, custom design, and enterprise software.",
+    url: "/services",
+    images: ["/og-image.png"],
+  },
+};
 
 export default function ServicesPage() {
   return (
@@ -96,7 +115,9 @@ export default function ServicesPage() {
 
               {/* Title */}
               <h2 className="font-display font-bold text-ink text-2xl md:text-[1.65rem] tracking-[-0.04em] uppercase leading-tight relative">
-                {s.title}
+                <Link href={`/services/${s.slug}`} className="hover:text-accent transition-colors duration-300">
+                  {s.title}
+                </Link>
               </h2>
 
               {/* Description */}
@@ -115,19 +136,27 @@ export default function ServicesPage() {
               </ul>
 
               {/* CTA */}
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-3 w-fit mt-2 relative
-                           font-mono text-xs tracking-[0.14em] uppercase
-                           px-5 py-3 bg-accent text-canvas btn-glow
-                           hover:bg-accent/90
-                           transition-all duration-300"
-              >
-                Work with us
-                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
-                  <path d="M1.5 5.5h8M5.5 1.5l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
+              <div className="flex items-center gap-4 relative">
+                <Link
+                  href={`/services/${s.slug}`}
+                  className="inline-flex items-center gap-3 w-fit mt-2
+                             font-mono text-xs tracking-[0.14em] uppercase
+                             px-5 py-3 bg-accent text-canvas btn-glow
+                             hover:bg-accent/90
+                             transition-all duration-300"
+                >
+                  Learn more
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+                    <path d="M1.5 5.5h8M5.5 1.5l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+                <Link
+                  href="/contact"
+                  className="font-mono text-xs tracking-[0.14em] uppercase text-ink/45 hover:text-accent mt-2 transition-colors duration-300"
+                >
+                  Work with us
+                </Link>
+              </div>
             </div>
           ))}
         </div>
