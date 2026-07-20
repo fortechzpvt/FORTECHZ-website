@@ -116,10 +116,10 @@ export default function ContactForm() {
               {/* 2. Brand New Phone Input Field built directly into the UI layouts */}
               <div className="space-y-2">
                 <label htmlFor="phone" className="font-mono text-xs tracking-[0.18em] text-ink/40 uppercase block">
-                  Contact Number
+                  Contact Number <span className="text-accent">*</span>
                 </label>
                 <input id="phone" name="phone" type="tel" value={form.phone}
-                  onChange={handleChange} placeholder="+94 7X XXX XXXX (optional)" className={inputCls} />
+                  onChange={handleChange} placeholder="+94 7X XXX XXXX " className={inputCls} />
               </div>
 
               <div className="space-y-2">
