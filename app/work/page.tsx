@@ -25,6 +25,7 @@ const projects = [
     year: "2026",
     desc: "A wildlife safari and adventure tour website designed to showcase experiences and drive bookings for excursions based in Wilpattu.",
     tags: ["Tourism", "Web Design", "Responsive"],
+    link: "https://willpattuwildadventures.com/",
   },
 ];
 
@@ -98,11 +99,25 @@ export default function WorkPage() {
 
               {/* Right: arrow */}
               <div className="hidden md:flex md:col-span-3 items-center justify-end">
-                <div className="w-10 h-10 border border-ink/12 flex items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all duration-300">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="text-ink/25 group-hover:text-canvas transition-colors duration-300">
-                    <path d="M3 11L11 3M11 3H6M11 3v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                  </svg>
-                </div>
+                {p.link ? (
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit ${p.client} website`}
+                    className="w-10 h-10 border border-ink/12 flex items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all duration-300"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="text-ink/25 group-hover:text-canvas transition-colors duration-300">
+                      <path d="M3 11L11 3M11 3H6M11 3v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                    </svg>
+                  </a>
+                ) : (
+                  <div className="w-10 h-10 border border-ink/12 flex items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all duration-300">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="text-ink/25 group-hover:text-canvas transition-colors duration-300">
+                      <path d="M3 11L11 3M11 3H6M11 3v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                )}
               </div>
             </div>
           </div>
