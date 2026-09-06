@@ -47,7 +47,7 @@ const founders = [
     index: "04",
     name: "Risath Athsara ",
     role: "Co-Founder",
-    linkedin: "www.linkedin.com/in/risath-athsara-wijethunga-007844340",
+    linkedin: "https://www.linkedin.com/in/risath-athsara-wijethunga-007844340/",
   },
 ];
 
