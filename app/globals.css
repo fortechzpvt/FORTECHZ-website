@@ -40,7 +40,7 @@ html {
 body {
   background-color: rgb(var(--canvas-rgb));
   color: rgb(var(--ink-rgb));
-  font-family: "Space Mono", monospace;
+  font-family: "Poppins", system-ui, sans-serif;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -83,7 +83,7 @@ body {
 
 /* ─── Utilities ─────────────────────────────────────────────────────────────── */
 @layer utilities {
-  .font-display { font-family: "ClashDisplay", "Sora", system-ui, sans-serif; }
-  .font-mono    { font-family: "Space Mono", "JetBrains Mono", monospace; }
+  .font-display { font-family: "Poppins", system-ui, sans-serif; }
+  .font-mono    { font-family: "Poppins", system-ui, sans-serif; }
   .btn-glow:hover { box-shadow: 0 6px 28px -4px rgba(12, 126, 255, 0.45); }
 }
