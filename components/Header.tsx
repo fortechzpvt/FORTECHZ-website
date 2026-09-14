@@ -14,7 +14,7 @@ function FortechzLogoMark() {
       <line x1="2.5" y1="8.25" x2="27.5" y2="21.75" stroke="currentColor" strokeWidth="0.4" opacity="0.3" />
       <line x1="27.5" y1="8.25" x2="2.5" y2="21.75" stroke="currentColor" strokeWidth="0.4" opacity="0.3" />
       <text x="15" y="20" textAnchor="middle" fontSize="11" fontWeight="700" fill="currentColor"
-        fontFamily="ClashDisplay, system-ui, sans-serif" letterSpacing="-0.05em">F</text>
+        fontFamily="Poppins, system-ui, sans-serif" letterSpacing="-0.05em">F</text>
     </svg>
   );
 }
