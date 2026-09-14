@@ -1,5 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Marquee from "@/components/Marquee";
+
+export const metadata: Metadata = {
+  title: "About Us — Our Story & Founders",
+  description: "Fortechz is a premium technology agency and studio founded in 2024, building custom software, websites, and digital infrastructure for Sri Lankan and global businesses.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Fortechz",
+    description: "A precision-focused technology studio building digital infrastructure for organisations that won't accept second best.",
+    url: "/about",
+    images: ["/og-image.png"],
+  },
+};
 
 const values = [
   {
@@ -27,25 +40,25 @@ const values = [
 const founders = [
   {
     index: "01",
-    name: "Luthmin Tathsilu ",
+    name: "Luthmin Tathsilu",
     role: "Co-Founder",
     linkedin: "https://www.linkedin.com/in/luthmin-tathsilu-00317b413/",
   },
   {
     index: "02",
-    name: "Nawidu Chandrasiri ",
+    name: "Nawidu Chandrasiri",
     role: "Co-Founder",
     linkedin: "https://www.linkedin.com/in/navindu-samodya-chandrasiri-3ab228286/",
   },
   {
     index: "03",
-    name: "Kethnula Siriwardana ",
+    name: "Kethnula Siriwardana",
     role: "Co-Founder",
     linkedin: "https://www.linkedin.com/in/kethnula-siriwardana-53657b322/",
   },
   {
     index: "04",
-    name: "Risath Athsara ",
+    name: "Risath Athsara",
     role: "Co-Founder",
     linkedin: "https://www.linkedin.com/in/risath-athsara-wijethunga-007844340/",
   },
