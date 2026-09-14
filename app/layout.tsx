@@ -2,23 +2,43 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import TransitionOverlay from "@/components/TransitionOverlay";
+import { SITE_URL, SITE_TITLE_DEFAULT, SITE_DESCRIPTION_DEFAULT, organizationJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Fortechz: Architecting Elite Digital Infrastructure",
-  description:
-    "Premium technology agency specializing in elite custom software systems, scalable digital infrastructure, and high performing web development.",
-  keywords: ["custom software", "digital infrastructure", "web development", "technology agency", "scalable systems", "enterprise software"],
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE_DEFAULT,
+    template: "%s | Fortechz",
+  },
+  description: SITE_DESCRIPTION_DEFAULT,
+  keywords: [
+    "custom software development Sri Lanka",
+    "web development company Sri Lanka",
+    "POS system Sri Lanka",
+    "ecommerce website development",
+    "mobile app development company",
+    "enterprise software development",
+    "digital infrastructure",
+    "technology agency Sri Lanka",
+  ],
   authors: [{ name: "Fortechz Systems" }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Fortechz: Elite Digital Infrastructure",
     description: "Engineering precision grade digital systems for enterprises demanding uncompromising performance.",
     type: "website",
+    url: SITE_URL,
+    siteName: "Fortechz",
     locale: "en_US",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: SITE_TITLE_DEFAULT }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Fortechz: Elite Digital Infrastructure",
     description: "Engineering precision grade digital systems for enterprises demanding uncompromising performance.",
+    images: ["/og-image.png"],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
 };
@@ -33,13 +53,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" />
       </head>
       <body className="bg-canvas text-ink antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+        />
         {/* Grain texture — noise overlay without broken root URL paths */}
         <div
           aria-hidden="true"
