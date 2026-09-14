@@ -17,8 +17,8 @@ export default {
         accent: "#0C7EFF",
       },
       fontFamily: {
-        display: ["ClashDisplay", "Sora", "system-ui", "sans-serif"],
-        mono: ['"Space Mono"', "JetBrains Mono", "monospace"],
+        display: ['"Poppins"', "system-ui", "sans-serif"],
+        mono: ['"Poppins"', "system-ui", "sans-serif"],
       },
       letterSpacing: {
         display: "-0.05em",
