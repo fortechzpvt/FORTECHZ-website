@@ -27,6 +27,15 @@ const projects = [
     tags: ["Tourism", "Web Design", "Responsive"],
     link: "https://willpattuwildadventures.com/",
   },
+  {
+    index: "04",
+    client: "Nalini Group ",
+    type: "Website",
+    year: "2026",
+    desc: "Custom website that can place oders , an admin page and also connect all bussiness to gather in Nalini Group.",
+    tags: ["Business", "Website", "Database", "Responsive"],
+    link: "https://shopnalini.com/",
+  },
 ];
 
 export default function WorkPage() {
