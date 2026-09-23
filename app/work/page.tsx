@@ -36,6 +36,13 @@ const projects = [
     tags: ["Business", "Website", "Database", "Responsive"],
     link: "https://shopnalini.com/",
   },
+  index: "05",
+    client: "Sakura Pre School",
+    type: "Website",
+    year: "2026",
+    desc: "Custom website that can for a pre school , Its an basic website that  you can book a visit and to see who the pre school works . ",
+    tags: ["Business", "Website", "PreSchool", "Responsive"],
+  },
 ];
 
 export default function WorkPage() {
