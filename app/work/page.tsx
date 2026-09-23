@@ -36,7 +36,8 @@ const projects = [
     tags: ["Business", "Website", "Database", "Responsive"],
     link: "https://shopnalini.com/",
   },
-  index: "05",
+  {
+    index: "05",
     client: "Sakura Pre School",
     type: "Website",
     year: "2026",
