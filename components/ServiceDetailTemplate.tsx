@@ -4,10 +4,7 @@ import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from "@/lib/seo";
 
 export type ServiceFaq = { question: string; answer: string };
 
-export type ServiceScreenshot = { src: string; title: string; caption: string };
-
 export type ServiceDetailData = {
-  screenshots?: ServiceScreenshot[];
   index: string;
   slug: string;
   serviceType: string;
@@ -20,7 +17,7 @@ export type ServiceDetailData = {
 };
 
 export default function ServiceDetailTemplate({ data }: { data: ServiceDetailData }) {
-  const { index, slug, serviceType, titleLines, tagline, intro, features, faqs, metaDescription, screenshots } = data;
+  const { index, slug, serviceType, titleLines, tagline, intro, features, faqs, metaDescription } = data;
   const name = titleLines.join(" ");
 
   const jsonLdBlocks = [
@@ -78,7 +75,6 @@ export default function ServiceDetailTemplate({ data }: { data: ServiceDetailDat
         </div>
       </section>
 
-
       <Marquee />
 
       {/* Intro copy */}
@@ -116,32 +112,6 @@ export default function ServiceDetailTemplate({ data }: { data: ServiceDetailDat
           ))}
         </div>
       </section>
-
-      {/* Screenshots */}
-      {screenshots && screenshots.length > 0 && (
-        <section className="px-6 md:px-10 lg:px-16 py-20 md:py-28 border-b border-ink/10">
-          <div className="max-w-6xl mx-auto space-y-24 md:space-y-32">
-            {screenshots.map((s, i) => (
-              <figure key={s.src} className="space-y-8 anim-up" style={{ animationDelay: "0.08s" }}>
-                <figcaption className="text-center space-y-3 max-w-2xl mx-auto">
-                  <p className="font-mono text-xs tracking-[0.18em] text-ink/25 uppercase">
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <h3 className="font-display font-bold text-ink text-3xl md:text-5xl tracking-[-0.04em] uppercase">{s.title}</h3>
-                  <p className="font-mono text-sm text-ink/55 leading-[1.9]">{s.caption}</p>
-                </figcaption>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={s.src}
-                  alt={`${s.title}: ${s.caption}`}
-                  loading="lazy"
-                  className="w-full h-auto rounded-xl border border-ink/10 shadow-2xl"
-                />
-              </figure>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* FAQ */}
       <section className="px-6 md:px-10 lg:px-16 py-16 border-b border-ink/10">

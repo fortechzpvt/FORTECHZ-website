@@ -6,20 +6,13 @@ const data: ServiceDetailData = {
   slug: "pos-systems",
   serviceType: "Point of Sale (POS) System Development",
   titleLines: ["POS", "Systems"],
-  tagline: "Fully customizable point-of-sale software, tailored to your retail or hospitality operation in Sri Lanka.",
+  tagline: "Custom point-of-sale software tailored to your retail or hospitality operation in Sri Lanka.",
   intro: [
     "Fortechz builds custom POS systems for retail shops, restaurants, supermarkets, and pharmacies across Sri Lanka — designed around how your business actually operates, not a rigid off-the-shelf template.",
     "Every POS system we build includes real-time inventory tracking, multi-location and multi-terminal support, and a reporting dashboard, so you always know what's selling, what's low, and what's owed.",
     "We also handle payment gateway integration so billing, cash, and card transactions flow through one system instead of three.",
   ],
-  features: ["Fully customizable to your workflow", "Real-time inventory tracking", "Multi-location support", "Payment gateway integration", "Reporting dashboard"],
-  screenshots: [
-    { src: "/pos/dashboard.png", title: "Dashboard", caption: "Sales, orders by channel and top sellers at a glance. Every widget can be tailored to your business." },
-    { src: "/pos/checkout.png", title: "Checkout", caption: "Fast billing for takeaway, dine-in and delivery apps, with payment methods set up your way." },
-    { src: "/pos/tables.png", title: "Tables", caption: "Add, rename and resize tables to match your floor plan." },
-    { src: "/pos/menu-items.png", title: "Menu items", caption: "Your own categories, prices and recipes, fully customizable." },
-    { src: "/pos/reports.png", title: "Reports", caption: "Revenue, profit and channel reports, with CSV and PDF export." },
-  ],
+  features: ["Real-time inventory tracking", "Multi-location support", "Payment gateway integration", "Reporting dashboard"],
   faqs: [
     {
       question: "How much does a POS system cost in Sri Lanka?",
