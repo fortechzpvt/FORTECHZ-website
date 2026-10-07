@@ -64,6 +64,15 @@ const projects: Project[] = [
     tags: ["PreSchool", "Web Design", "Responsive", "Education"],
     link: "https://sakura-pre-school.vercel.app/#top",
   },
+  {
+    index: "04",
+    client: "Nalini Group",
+    type: "Website",
+    year: "2026",
+    desc: "This website connect all the services in Nalini Group ",
+    tags: ["Business Group", "Web Design", "Responsive", "Hub"],
+    link: "https://shopnalini.com/",
+  },
 ];
 
 export default function WorkPage() {
