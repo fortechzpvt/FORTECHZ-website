@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 export default function SiteFooter() {
   return (
     <footer
@@ -20,7 +18,6 @@ export default function SiteFooter() {
             Operational
           </span>
         </div>
-
       </div>
     </footer>
   );

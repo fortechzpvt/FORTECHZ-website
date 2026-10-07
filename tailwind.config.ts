@@ -17,8 +17,8 @@ export default {
         accent: "#0C7EFF",
       },
       fontFamily: {
-        display: ['"Poppins"', "system-ui", "sans-serif"],
-        mono: ['"Poppins"', "system-ui", "sans-serif"],
+        display: ['var(--font-poppins)', '"Poppins"', "system-ui", "sans-serif"],
+        mono: ['var(--font-poppins)', '"Poppins"', "system-ui", "sans-serif"],
       },
       letterSpacing: {
         display: "-0.05em",

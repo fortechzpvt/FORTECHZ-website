@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import TransitionOverlay from "@/components/TransitionOverlay";
-import { SITE_URL, SITE_TITLE_DEFAULT, SITE_DESCRIPTION_DEFAULT, organizationJsonLd } from "@/lib/seo";
+import { SITE_URL, SITE_TITLE_DEFAULT, SITE_DESCRIPTION_DEFAULT, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -22,6 +30,8 @@ export const metadata: Metadata = {
     "technology agency Sri Lanka",
   ],
   authors: [{ name: "Fortechz Systems" }],
+  applicationName: "Fortechz",
+  formatDetection: { telephone: false, email: false, address: false },
   alternates: {
     canonical: "/",
   },
@@ -47,20 +57,16 @@ export const viewport: Viewport = {
   themeColor: "#F0F0F0",
   width: "device-width",
   initialScale: 1,
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" />
-      </head>
+    <html lang="en" className={poppins.variable} suppressHydrationWarning>
       <body className="bg-canvas text-ink antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([organizationJsonLd(), websiteJsonLd()]) }}
         />
         {/* Grain texture — noise overlay without broken root URL paths */}
         <div

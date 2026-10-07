@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import Link from "next/link";
 import Marquee from "@/components/Marquee";
+
+export const metadata: Metadata = {
+  title: "Our Work — Client Projects",
+  description: "See how Fortechz has delivered POS systems, business websites, and tourism platforms for clients in Sri Lanka, including Nalini Book Shop, Noble Path Tourism, and Wilpattu Wild Adventures.",
+  alternates: { canonical: "/work" },
+  openGraph: {
+    title: "Our Work | Fortechz",
+    description: "Client projects delivered by Fortechz across retail, tourism, and hospitality in Sri Lanka.",
+    url: "/work",
+    images: ["/og-image.png"],
+  },
+};
 
 const projects = [
   {
@@ -25,30 +39,13 @@ const projects = [
     year: "2026",
     desc: "A wildlife safari and adventure tour website designed to showcase experiences and drive bookings for excursions based in Wilpattu.",
     tags: ["Tourism", "Web Design", "Responsive"],
-    link: "https://willpattuwildadventures.com/",
-  },
-  {
-    index: "04",
-    client: "Nalini Group ",
-    type: "Website",
-    year: "2026",
-    desc: "Custom website that can place oders , an admin page and also connect all bussiness to gather in Nalini Group.",
-    tags: ["Business", "Website", "Database", "Responsive"],
-    link: "https://shopnalini.com/",
-  },
-  {
-    index: "05",
-    client: "Sakura Pre School",
-    type: "Website",
-    year: "2026",
-    desc: "Custom website that can for a pre school , Its an basic website that  you can book a visit and to see who the pre school works . ",
-    tags: ["Business", "Website", "PreSchool", "Responsive"],
   },
 ];
 
 export default function WorkPage() {
   return (
     <main className="min-h-screen bg-canvas pt-14">
+      <BreadcrumbJsonLd name="Work" path="/work" />
 
       {/* Page header */}
       <section className="px-6 md:px-10 lg:px-16 pt-20 pb-16 border-b border-ink/10">
@@ -116,25 +113,11 @@ export default function WorkPage() {
 
               {/* Right: arrow */}
               <div className="hidden md:flex md:col-span-3 items-center justify-end">
-                {p.link ? (
-                  <a
-                    href={p.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Visit ${p.client} website`}
-                    className="w-10 h-10 border border-ink/12 flex items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all duration-300"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="text-ink/25 group-hover:text-canvas transition-colors duration-300">
-                      <path d="M3 11L11 3M11 3H6M11 3v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                    </svg>
-                  </a>
-                ) : (
-                  <div className="w-10 h-10 border border-ink/12 flex items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all duration-300">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="text-ink/25 group-hover:text-canvas transition-colors duration-300">
-                      <path d="M3 11L11 3M11 3H6M11 3v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                )}
+                <div className="w-10 h-10 border border-ink/12 flex items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all duration-300">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="text-ink/25 group-hover:text-canvas transition-colors duration-300">
+                    <path d="M3 11L11 3M11 3H6M11 3v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>

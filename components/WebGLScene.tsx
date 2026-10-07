@@ -30,17 +30,16 @@ export default function WebGLScene({ scrollProgress }: WebGLSceneProps) {
     try {
 
     // ── Renderer ─────────────────────────────────────────────────────────────
+    const isLite = window.innerWidth < 768 || (navigator.hardwareConcurrency ?? 8) <= 4;
     const renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: !isLite,
       alpha: true,
-      powerPreference: "high-performance",
+      powerPreference: isLite ? "default" : "high-performance",
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLite ? 1.5 : 2));
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.3;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     Object.assign(renderer.domElement.style, {
       position: "absolute",
       inset: "0",
@@ -64,7 +63,6 @@ export default function WebGLScene({ scrollProgress }: WebGLSceneProps) {
 
     const key = new THREE.DirectionalLight(0xffffff, 4.5);
     key.position.set(6, 9, 5);
-    key.castShadow = true;
     scene.add(key);
 
     const fill = new THREE.DirectionalLight(0xcccccc, 1.2);
@@ -108,22 +106,21 @@ export default function WebGLScene({ scrollProgress }: WebGLSceneProps) {
     const group = new THREE.Group();
     scene.add(group);
 
-    const knotGeo = new THREE.TorusKnotGeometry(1, 0.28, 300, 48, 2, 3);
+    const knotGeo = new THREE.TorusKnotGeometry(1, 0.28, isLite ? 120 : 300, isLite ? 20 : 48, 2, 3);
     const knot = new THREE.Mesh(knotGeo, porcelainMat);
-    knot.castShadow = true;
     group.add(knot);
 
-    const r1Geo = new THREE.TorusGeometry(1.95, 0.02, 20, 300);
+    const r1Geo = new THREE.TorusGeometry(1.95, 0.02, isLite ? 8 : 20, isLite ? 120 : 300);
     const ring1 = new THREE.Mesh(r1Geo, chromeMat);
     ring1.rotation.x = Math.PI / 4;
     group.add(ring1);
 
-    const r2Geo = new THREE.TorusGeometry(2.25, 0.013, 20, 300);
+    const r2Geo = new THREE.TorusGeometry(2.25, 0.013, isLite ? 8 : 20, isLite ? 120 : 300);
     const ring2 = new THREE.Mesh(r2Geo, chromeThinMat);
     ring2.rotation.set(0, Math.PI / 6, Math.PI / 3.5);
     group.add(ring2);
 
-    const r3Geo = new THREE.TorusGeometry(2.55, 0.009, 20, 300);
+    const r3Geo = new THREE.TorusGeometry(2.55, 0.009, isLite ? 8 : 20, isLite ? 120 : 300);
     const ring3 = new THREE.Mesh(r3Geo, chromeThinMat);
     ring3.rotation.set(Math.PI / 2.5, Math.PI / 5, 0);
     group.add(ring3);
@@ -163,6 +160,7 @@ export default function WebGLScene({ scrollProgress }: WebGLSceneProps) {
 
     function animate() {
       rafId = requestAnimationFrame(animate);
+      if (document.hidden) return;
       const t = clock.getElapsedTime();
 
       // Inertia damping when not dragging

@@ -23,6 +23,8 @@ export function organizationJsonLd() {
     name: SITE_NAME,
     legalName: "Fortechz (Pvt) Ltd",
     url: SITE_URL,
+    logo: absoluteUrl("/fortechz-logo-source.png"),
+    image: absoluteUrl("/og-image.png"),
     email: CONTACT_EMAIL,
     description: SITE_DESCRIPTION_DEFAULT,
     foundingDate: "2024",
@@ -37,6 +39,19 @@ export function organizationJsonLd() {
       contactType: "sales",
       areaServed: "LK",
     },
+  };
+}
+
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: SITE_NAME,
+    description: SITE_DESCRIPTION_DEFAULT,
+    inLanguage: "en",
+    publisher: { "@id": `${SITE_URL}/#organization` },
   };
 }
 

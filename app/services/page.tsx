@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import Link from "next/link";
 import Marquee from "@/components/Marquee";
 
@@ -62,6 +63,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <main className="min-h-screen bg-canvas pt-14">
+      <BreadcrumbJsonLd name="Services" path="/services" />
 
       {/* Page header */}
       <section className="px-6 md:px-10 lg:px-16 pt-20 pb-16 border-b border-ink/10">

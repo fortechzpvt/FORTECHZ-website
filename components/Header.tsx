@@ -100,6 +100,8 @@ export default function Header() {
               <img
                 src={isDark ? "/fortechz-wordmark-dark.png" : "/fortechz-wordmark-light.png"}
                 alt="Fortechz"
+                height={20}
+                decoding="async"
                 className="h-[20px] w-auto"
               />
             ) : (

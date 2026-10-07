@@ -22,8 +22,40 @@ class WebGLErrorBoundary extends React.Component<
   render() { return this.state.hasError ? null : this.props.children; }
 }
 
+/**
+ * Mount the heavy three.js scene only after the page has loaded and the main
+ * thread is idle, so first paint / Total Blocking Time aren't held hostage by
+ * shader compilation. Skipped entirely for reduced-motion users.
+ */
+function useDeferredMount() {
+  const [ready, setReady] = React.useState(false);
+  React.useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let timer: number | undefined;
+    let idle: number | undefined;
+    const start = () => {
+      timer = window.setTimeout(() => {
+        if ("requestIdleCallback" in window) {
+          idle = window.requestIdleCallback(() => setReady(true), { timeout: 3000 });
+        } else {
+          setReady(true);
+        }
+      }, 1500);
+    };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+    return () => {
+      window.removeEventListener("load", start);
+      if (timer) clearTimeout(timer);
+      if (idle && "cancelIdleCallback" in window) window.cancelIdleCallback(idle);
+    };
+  }, []);
+  return ready;
+}
+
 export default function HeroSection() {
   const scrollProgress = useScrollProgress();
+  const showScene = useDeferredMount();
 
   return (
     <section
@@ -79,7 +111,7 @@ export default function HeroSection() {
       {/* Layer 1: WebGL Interactive Model */}
       <div className="absolute inset-0 z-10" aria-hidden="true">
         <WebGLErrorBoundary>
-          <WebGLScene scrollProgress={scrollProgress} />
+          {showScene && <WebGLScene scrollProgress={scrollProgress} />}
         </WebGLErrorBoundary>
       </div>
 
