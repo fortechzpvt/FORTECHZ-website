@@ -65,7 +65,7 @@ const projects: Project[] = [
     link: "https://sakura-pre-school.vercel.app/#top",
   },
   {
-    index: "04",
+    index: "05",
     client: "Nalini Group",
     type: "Website",
     year: "2026",
