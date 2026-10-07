@@ -23,6 +23,7 @@ const projects = [
     year: "2026",
     desc: "Custom point of sale system built for everyday retail operations, covering inventory tracking, billing, and sales records in one streamlined interface.",
     tags: ["POS", "Inventory", "Billing", "Retail"],
+    link: "https://shopnalini.com/"
   },
   {
     index: "02",
@@ -31,6 +32,7 @@ const projects = [
     year: "2026",
     desc: "A tourism website showcasing travel packages and destinations, built to give visitors a fast, clear way to explore offerings and get in touch.",
     tags: ["Tourism", "Web Design", "Responsive"],
+    link: "https://www.noblepathsrilanka.com/"
   },
   {
     index: "03",
@@ -39,6 +41,16 @@ const projects = [
     year: "2026",
     desc: "A wildlife safari and adventure tour website designed to showcase experiences and drive bookings for excursions based in Wilpattu.",
     tags: ["Tourism", "Web Design", "Responsive"],
+    link: "https://willpattuwildadventures.com/"
+  },
+  {
+    index: "04",
+    client: "Sakura pre School ",
+    type: "Website",
+    year: "2026",
+    desc: "A pre school website that tells about the pre school",
+    tags: ["PreSchool", "Web Design", "Responsive", "Education"],
+    link: "https://sakura-pre-school.vercel.app/#top"
   },
 ];
 
