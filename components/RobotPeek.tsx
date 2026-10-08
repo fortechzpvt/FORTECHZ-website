@@ -204,7 +204,7 @@ export default function RobotPeek() {
 
   const top = corner.v === "top";
   const style: React.CSSProperties = {
-    width: "clamp(60px, 11vw, 112px)",
+    width: "clamp(55px, 10vw, 109px)",
     ...(top
       ? {
           top: `calc(${HEADER_PX}px + env(safe-area-inset-top, 0px))`,
