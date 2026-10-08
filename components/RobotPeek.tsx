@@ -140,15 +140,24 @@ export default function RobotPeek() {
       if (cancelled || !b || !a) return;
 
       const top = c.v === "top";
-      const lean = top ? 0 : c.h === "right" ? -9 : 9;
+      // Top corners: hang upside down from under the header, leaning toward the page.
+      const flip = top ? 180 : 0;
+      const tilt = c.h === "right" ? 9 : -9;
+      const rot = top ? flip + tilt : -tilt;
       const hidden = top ? "-115%" : "112%";
-      const shown = top ? "6%" : "32%";
+      const sneak = top ? "-82%" : "78%"; // first, cautious look
+      const shown = top ? "-30%" : "32%"; // then a proper peek
 
-      await animate(b, { y: hidden, rotate: lean }, { duration: 0 });
+      await animate(b, { y: hidden, rotate: rot }, { duration: 0 });
       await animate(a, { rotate: 0 }, { duration: 0 });
 
-      // Pop in, then blink hello.
-      await animate(b, { y: shown, rotate: lean }, spring);
+      // Sneak in slowly, look around, then pop out further.
+      await animate(b, { y: sneak, rotate: rot }, { duration: 0.9, ease: "easeOut" });
+      setEyes("open");
+      await wait(350);
+      await blink();
+      await wait(150);
+      await animate(b, { y: shown, rotate: rot }, spring);
       await blink();
       if (cancelled) return;
 
@@ -160,7 +169,7 @@ export default function RobotPeek() {
         { rotate: [128, 158, 124, 158, 124, 150, 128] },
         { duration: 1.7, ease: "easeInOut" }
       );
-      if (top) animate(b, { y: ["6%", "1%", "6%"] }, { duration: 1.2, ease: "easeInOut" });
+      if (top) animate(b, { y: ["-30%", "-26%", "-30%"] }, { duration: 1.2, ease: "easeInOut" });
       await wait(450);
 
       // Bye: lower the arm, blink, leave.
@@ -170,7 +179,7 @@ export default function RobotPeek() {
       await blink();
       await animate(
         b,
-        { y: hidden, rotate: lean },
+        { y: hidden, rotate: rot },
         { duration: 0.6, ease: [0.5, 0, 0.75, 0] }
       );
     }
@@ -220,8 +229,8 @@ export default function RobotPeek() {
         className="relative will-change-transform"
         style={{
           aspectRatio: `${VB_W} / ${VB_H}`,
-          transform: `translateY(${top ? "-115%" : "112%"})`,
-          transformOrigin: "50% 100%",
+          transform: `translateY(${top ? "-115%" : "112%"}) rotate(${top ? 180 : 0}deg)`,
+          transformOrigin: top ? "50% 50%" : "50% 100%",
           filter: "drop-shadow(0 8px 14px rgba(12,126,255,0.35))",
         }}
       >
