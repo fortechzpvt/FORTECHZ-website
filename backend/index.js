@@ -54,7 +54,7 @@ app.post("/api/contact", async (req, res) => {
     html: `
       <div style="font-family:monospace;max-width:600px;margin:0 auto;color:#1a1a1a;">
         <h2 style="border-bottom:2px solid #e5e5e5;padding-bottom:12px;margin-bottom:24px;">
-          New Enquiry — Fortechz
+          New Enquiry | Fortechz
         </h2>
 
         <table style="width:100%;border-collapse:collapse;">
