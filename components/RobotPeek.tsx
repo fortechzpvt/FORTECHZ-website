@@ -25,7 +25,7 @@ const CORNERS: Corner[] = [
 const WAVE_FACES: Eyes[] = ["happy", "wink", "love", "happy"];
 
 const FIRST_DELAY_MS = 3500;
-const REPEAT_EVERY_MS = 18000;
+const REPEAT_EVERY_MS = 30000;
 const HEADER_PX = 56; // matches h-14 header
 
 // Geometry of the artwork (365 x 420 canvas)
@@ -120,7 +120,7 @@ export default function RobotPeek() {
 
     const body = () => scope.current?.querySelector("[data-bot]") as HTMLElement | null;
     const arm = () => scope.current?.querySelector("[data-arm]") as HTMLElement | null;
-    const spring = { type: "spring", stiffness: 150, damping: 13 } as const;
+    const spring = { type: "spring", stiffness: 120, damping: 26 } as const; // no overshoot
 
     async function blink() {
       setEyes("blink");
@@ -140,10 +140,8 @@ export default function RobotPeek() {
       if (cancelled || !b || !a) return;
 
       const top = c.v === "top";
-      // Top corners: hang upside down from under the header, leaning toward the page.
-      const flip = top ? 180 : 0;
-      const tilt = c.h === "right" ? 9 : -9;
-      const rot = top ? flip + tilt : -tilt;
+      // Top corners: hang upside down from under the header.
+      const rot = top ? 180 : 0; // no sideways tilt, so it never looks like it is sliding
       const hidden = top ? "-115%" : "112%";
       const sneak = top ? "-82%" : "78%"; // first, cautious look
       const shown = top ? "-30%" : "32%"; // then a proper peek
@@ -166,10 +164,9 @@ export default function RobotPeek() {
       await animate(a, { rotate: 128 }, { type: "spring", stiffness: 200, damping: 14 });
       await animate(
         a,
-        { rotate: [128, 158, 124, 158, 124, 150, 128] },
-        { duration: 1.7, ease: "easeInOut" }
+        { rotate: [128, 152, 126, 152, 126, 140] },
+        { duration: 1.6, ease: "easeInOut" }
       );
-      if (top) animate(b, { y: ["-30%", "-26%", "-30%"] }, { duration: 1.2, ease: "easeInOut" });
       await wait(450);
 
       // Bye: lower the arm, blink, leave.
