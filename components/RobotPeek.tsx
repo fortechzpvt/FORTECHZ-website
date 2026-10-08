@@ -69,7 +69,6 @@ function Eye({ cx, kind }: EyeProps) {
         fill={EYE_FILL}
         className="transition-all duration-150 ease-in-out"
       />
-
       {kind === "open" && (
         <ellipse
           cx={cx - 7}
@@ -87,11 +86,7 @@ function Eye({ cx, kind }: EyeProps) {
 function Face({ eyes }: { eyes: Eyes }) {
   const left = eyes === "wink" ? "open" : eyes;
   const right = eyes === "wink" ? "happy" : eyes;
-
-  const showCheeks =
-    eyes === "happy" ||
-    eyes === "love" ||
-    eyes === "wink";
+  const showCheeks = eyes === "happy" || eyes === "love" || eyes === "wink";
 
   return (
     <svg
@@ -101,13 +96,7 @@ function Face({ eyes }: { eyes: Eyes }) {
       focusable="false"
     >
       <defs>
-        <filter
-          id="eyeGlow"
-          x="-50%"
-          y="-50%"
-          width="200%"
-          height="200%"
-        >
+        <filter id="eyeGlow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="3" result="b" />
           <feMerge>
             <feMergeNode in="b" />
@@ -137,7 +126,6 @@ function Face({ eyes }: { eyes: Eyes }) {
           ry={4.5}
           fill="#FF8FB8"
         />
-
         <ellipse
           cx={EYE_R + 8}
           cy={146}
@@ -164,10 +152,10 @@ export default function RobotPeek(): React.ReactElement | null {
   const isAbortedRef = useRef(false);
   const activeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abortResolverRef = useRef<(() => void) | null>(null);
-  const activeCornerRef = useRef<Corner>(CORNERS[0]);
+  const currentCornerRef = useRef<Corner>(CORNERS[0]);
 
   const clearActiveTimer = useCallback(() => {
-    if (activeTimerRef.current !== null) {
+    if (activeTimerRef.current) {
       clearTimeout(activeTimerRef.current);
       activeTimerRef.current = null;
     }
@@ -196,9 +184,7 @@ export default function RobotPeek(): React.ReactElement | null {
       });
     };
 
-    const runOrAbort = async <T,>(
-      task: Promise<T> | T
-    ): Promise<T> => {
+    const runOrAbort = async <T,>(task: Promise<T> | T): Promise<T> => {
       const result = await Promise.race([
         Promise.resolve(task),
         awaitAbortSignal().then(() => {
@@ -210,20 +196,17 @@ export default function RobotPeek(): React.ReactElement | null {
         throw new Error("ABORT_ANIMATION");
       }
 
-      return result;
+      return result as T;
     };
 
     const triggerEmergencyRetract = () => {
       const botEl = botRef.current;
       const armEl = armRef.current;
+      const activeCorner = currentCornerRef.current;
 
-      const activeCorner = activeCornerRef.current;
       const isTop = activeCorner.v === "top";
-
       const targetHiddenY = isTop ? "-115%" : "112%";
       const targetRot = isTop ? 180 : 0;
-
-      setIsReady(false);
 
       if (botEl) {
         void animate(
@@ -262,10 +245,11 @@ export default function RobotPeek(): React.ReactElement | null {
         abortResolverRef.current = null;
       }
 
+      setIsReady(false);
       triggerEmergencyRetract();
     };
 
-    async function blink(): Promise<void> {
+    async function blink() {
       if (isUnmounted) return;
 
       setEyes("blink");
@@ -277,30 +261,20 @@ export default function RobotPeek(): React.ReactElement | null {
       }
     }
 
-    async function executeVisit(): Promise<void> {
-      const currentCorner =
-        CORNERS[visitIndex % CORNERS.length];
-
-      const currentFace =
-        WAVE_FACES[visitIndex % WAVE_FACES.length];
+    async function executeVisit() {
+      const currentCorner = CORNERS[visitIndex % CORNERS.length];
+      const currentFace = WAVE_FACES[visitIndex % WAVE_FACES.length];
 
       visitIndex += 1;
 
-      activeCornerRef.current = currentCorner;
+      currentCornerRef.current = currentCorner;
 
       isAbortedRef.current = false;
       isVisitingRef.current = true;
 
+      setIsReady(false);
       setCorner(currentCorner);
       setEyes("open");
-      setIsReady(false);
-
-      const isTop = currentCorner.v === "top";
-
-      const rot = isTop ? 180 : 0;
-      const hiddenY = isTop ? "-115%" : "112%";
-      const sneakY = isTop ? "-82%" : "78%";
-      const shownY = isTop ? "-30%" : "32%";
 
       try {
         await runOrAbort(wait(60));
@@ -309,6 +283,15 @@ export default function RobotPeek(): React.ReactElement | null {
         const armEl = armRef.current;
 
         if (!botEl || !armEl || isUnmounted) return;
+
+        const isTop = currentCorner.v === "top";
+
+        const rot = isTop ? 180 : 0;
+        const sneakRotate = isTop ? 174 : 6;
+
+        const hiddenY = isTop ? "-115%" : "112%";
+        const sneakY = isTop ? "-82%" : "78%";
+        const shownY = isTop ? "-30%" : "32%";
 
         await animate(
           botEl,
@@ -331,20 +314,16 @@ export default function RobotPeek(): React.ReactElement | null {
           }
         );
 
-        await runOrAbort(wait(80));
-
-        if (isUnmounted) return;
+        if (isUnmounted || isAbortedRef.current) return;
 
         setIsReady(true);
-
-        await runOrAbort(wait(40));
 
         await runOrAbort(
           animate(
             botEl,
             {
               y: sneakY,
-              rotate: rot,
+              rotate: sneakRotate,
             },
             {
               duration: 0.9,
@@ -352,14 +331,6 @@ export default function RobotPeek(): React.ReactElement | null {
             }
           )
         );
-
-        if (!isUnmounted) {
-          setEyes("open");
-        }
-
-        await runOrAbort(wait(350));
-        await runOrAbort(blink());
-        await runOrAbort(wait(150));
 
         await runOrAbort(
           animate(
@@ -375,6 +346,14 @@ export default function RobotPeek(): React.ReactElement | null {
             }
           )
         );
+
+        if (!isUnmounted) {
+          setEyes("open");
+        }
+
+        await runOrAbort(wait(350));
+        await runOrAbort(blink());
+        await runOrAbort(wait(150));
 
         await runOrAbort(blink());
 
@@ -443,10 +422,9 @@ export default function RobotPeek(): React.ReactElement | null {
           )
         );
 
-        if (!isUnmounted) {
-          setIsReady(false);
-        }
+        setIsReady(false);
       } catch {
+        setIsReady(false);
       } finally {
         isVisitingRef.current = false;
 
@@ -456,7 +434,7 @@ export default function RobotPeek(): React.ReactElement | null {
       }
     }
 
-    async function startLoop(): Promise<void> {
+    async function startLoop() {
       await wait(FIRST_DELAY_MS);
 
       while (!isUnmounted) {
@@ -470,9 +448,7 @@ export default function RobotPeek(): React.ReactElement | null {
       }
     }
 
-    window.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     void startLoop();
 
@@ -480,6 +456,11 @@ export default function RobotPeek(): React.ReactElement | null {
       isUnmounted = true;
 
       clearActiveTimer();
+
+      if (abortResolverRef.current) {
+        abortResolverRef.current();
+        abortResolverRef.current = null;
+      }
 
       window.removeEventListener("scroll", onScroll);
     };
@@ -493,7 +474,6 @@ export default function RobotPeek(): React.ReactElement | null {
 
   const positionStyle: React.CSSProperties = {
     width: "clamp(55px, 10vw, 109px)",
-
     ...(isTop
       ? {
           top: `calc(${HEADER_PX}px + env(safe-area-inset-top, 0px))`,
@@ -502,15 +482,12 @@ export default function RobotPeek(): React.ReactElement | null {
       : {
           bottom: 0,
         }),
-
     ...(corner.h === "right"
       ? {
-          right:
-            "max(0.75rem, env(safe-area-inset-right, 0px))",
+          right: "max(0.75rem, env(safe-area-inset-right, 0px))",
         }
       : {
-          left:
-            "max(0.75rem, env(safe-area-inset-left, 0px))",
+          left: "max(0.75rem, env(safe-area-inset-left, 0px))",
         }),
   };
 
@@ -521,7 +498,6 @@ export default function RobotPeek(): React.ReactElement | null {
       style={{
         ...positionStyle,
         opacity: isReady ? 1 : 0,
-        transition: "none",
       }}
     >
       <div
@@ -529,14 +505,9 @@ export default function RobotPeek(): React.ReactElement | null {
         className="relative will-change-transform"
         style={{
           aspectRatio: `${VB_W} / ${VB_H}`,
-          transform: `translateY(${
-            isTop ? "-115%" : "112%"
-          }) rotate(${isTop ? 180 : 0}deg)`,
-          transformOrigin: isTop
-            ? "50% 50%"
-            : "50% 100%",
-          filter:
-            "drop-shadow(0 8px 14px rgba(12,126,255,0.35))",
+          transform: `translateY(${isTop ? "-115%" : "112%"}) rotate(${isTop ? 180 : 0}deg)`,
+          transformOrigin: isTop ? "50% 50%" : "50% 100%",
+          filter: "drop-shadow(0 8px 14px rgba(12,126,255,0.35))",
         }}
       >
         <img
@@ -568,4 +539,3 @@ export default function RobotPeek(): React.ReactElement | null {
     </div>
   );
 }
-
