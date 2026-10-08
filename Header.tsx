@@ -115,13 +115,6 @@ export default function Header() {
                 </div>
               </>
             )}
-            <div className="hidden sm:flex items-center gap-1.5 ml-3 px-2 py-1 border border-ink/10 rounded-sm">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-              </span>
-              <span className="font-mono text-[0.5rem] text-ink/40 tracking-[0.15em] uppercase">Operational</span>
-            </div>
           </Link>
 
           {/* Desktop nav + theme toggle + hamburger */}

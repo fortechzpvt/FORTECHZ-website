@@ -6,7 +6,6 @@ import { useScrollProgress } from "@/hooks/useScrollProgress";
 import BackgroundTypography from "./BackgroundTypography";
 import LeftPanel from "./LeftPanel";
 import RightPanel from "./RightPanel";
-import SiteFooter from "./SiteFooter";
 
 const WebGLScene = dynamic(() => import("./WebGLScene"), {
   ssr: false,
@@ -127,7 +126,6 @@ export default function HeroSection() {
       </div>
 
       {/* Layer 2: Footer Status Bar */}
-      <SiteFooter />
     </section>
   );
 }

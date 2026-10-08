@@ -236,19 +236,6 @@ export default function ContactForm() {
               </div>
             ))}
           </div>
-
-          <div className="w-full h-px bg-ink/[0.07]" />
-
-          <div className="space-y-3">
-            <p className="font-mono text-xs tracking-[0.2em] text-ink/30 uppercase">System status</p>
-            <div className="flex items-center gap-2.5">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-              </span>
-              <span className="font-mono text-xs text-ink/40 tracking-[0.12em] uppercase">All systems operational</span>
-            </div>
-          </div>
         </div>
       </div>
     </main>
