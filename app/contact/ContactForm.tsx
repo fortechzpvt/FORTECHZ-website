@@ -6,15 +6,9 @@ import Marquee from "@/components/Marquee";
 const budgetOptions = ["LKR25,000 to LKR50,000", "LKR50,000 to LKR300,000", "LKR300,000+", "Let's discuss"];
 const serviceOptions = ["Basic Business Website","POS System","Ecommerce Platform","Web & Mobile Development","Custom Website Design & Build","Enterprise Software","Not sure yet"];
 
-const inputCls =
-  "w-full bg-transparent border border-ink/15 focus:border-accent outline-none " +
-  "font-mono text-sm text-ink placeholder:text-ink/25 " +
-  "px-4 py-3.5 transition-colors duration-200";
+const inputCls = "glass-input font-mono text-sm";
 
-const selectCls =
-  "w-full bg-canvas border border-ink/15 focus:border-accent outline-none " +
-  "font-mono text-sm text-ink " +
-  "px-4 py-3.5 transition-colors duration-200 cursor-pointer";
+const selectCls = "glass-input font-mono text-sm cursor-pointer";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://fortechz-website.onrender.com";
 
@@ -87,7 +81,7 @@ export default function ContactForm() {
               </p>
               <button
                 onClick={() => { setSubmitted(false); setForm({ name:"", email:"", company:"", service:"", budget:"", message:"" }); }}
-                className="font-mono text-xs tracking-[0.14em] text-canvas uppercase px-5 py-3 bg-accent hover:bg-accent/90 btn-glow transition-all duration-200"
+                className="btn-glass-primary"
               >
                 Send another message
               </button>
@@ -153,9 +147,7 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-auto font-mono text-xs tracking-[0.14em] text-canvas uppercase
-                           px-8 py-4 bg-accent hover:bg-accent/90 btn-glow
-                           transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-glass-primary w-full sm:w-auto"
               >
                 {loading ? "Sending…" : "Send enquiry →"}
               </button>

@@ -141,11 +141,7 @@ export default function ServicesPage() {
               <div className="flex items-center gap-4 relative">
                 <Link
                   href={`/services/${s.slug}`}
-                  className="inline-flex items-center gap-3 w-fit mt-2
-                             font-mono text-xs tracking-[0.14em] uppercase
-                             px-5 py-3 bg-accent text-canvas btn-glow
-                             hover:bg-accent/90
-                             transition-all duration-300"
+                  className="btn-glass-primary w-fit mt-2"
                 >
                   Learn more
                   <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
@@ -154,7 +150,7 @@ export default function ServicesPage() {
                 </Link>
                 <Link
                   href="/contact"
-                  className="font-mono text-xs tracking-[0.14em] uppercase text-ink/45 hover:text-accent mt-2 transition-colors duration-300"
+                  className="btn-glass mt-2"
                 >
                   Work with us
                 </Link>
@@ -172,10 +168,7 @@ export default function ServicesPage() {
         </div>
         <Link
           href="/contact"
-          className="font-mono text-xs tracking-[0.14em] uppercase
-                     px-6 py-3.5 bg-accent text-canvas btn-glow
-                     hover:bg-accent/90
-                     transition-all duration-300"
+          className="btn-glass-primary"
         >
           Book a free consultation
         </Link>

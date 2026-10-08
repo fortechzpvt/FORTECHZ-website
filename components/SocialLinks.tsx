@@ -6,7 +6,7 @@ export default function SocialLinks({ className = "" }: { className?: string }) 
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Fortechz on Instagram"
-        className="w-9 h-9 flex items-center justify-center text-ink/40 hover:text-accent transition-colors duration-200"
+        className="btn-glass-icon"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.6" />
@@ -19,7 +19,7 @@ export default function SocialLinks({ className = "" }: { className?: string }) 
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Fortechz on TikTok"
-        className="w-9 h-9 flex items-center justify-center text-ink/40 hover:text-accent transition-colors duration-200"
+        className="btn-glass-icon"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
