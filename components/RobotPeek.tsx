@@ -36,9 +36,7 @@ function Eye({ cx, kind }: EyeProps) {
   if (kind === "happy") {
     return (
       <path
-        d={`M ${cx - 22} ${EYE_Y + 12} Q ${cx} ${EYE_Y - 26} ${cx + 22} ${
-          EYE_Y + 12
-        }`}
+        d={`M ${cx - 22} ${EYE_Y + 12} Q ${cx} ${EYE_Y - 26} ${cx + 22} ${EYE_Y + 12}`}
         fill="none"
         stroke={EYE_FILL}
         strokeWidth={10}
@@ -89,8 +87,11 @@ function Eye({ cx, kind }: EyeProps) {
 function Face({ eyes }: { eyes: Eyes }) {
   const left = eyes === "wink" ? "open" : eyes;
   const right = eyes === "wink" ? "happy" : eyes;
+
   const showCheeks =
-    eyes === "happy" || eyes === "love" || eyes === "wink";
+    eyes === "happy" ||
+    eyes === "love" ||
+    eyes === "wink";
 
   return (
     <svg
@@ -129,15 +130,29 @@ function Face({ eyes }: { eyes: Eyes }) {
         className="transition-opacity duration-250 ease-in-out"
         style={{ opacity: showCheeks ? 0.8 : 0 }}
       >
-        <ellipse cx={EYE_L - 8} cy={146} rx={11} ry={4.5} fill="#FF8FB8" />
-        <ellipse cx={EYE_R + 8} cy={146} rx={11} ry={4.5} fill="#FF8FB8" />
+        <ellipse
+          cx={EYE_L - 8}
+          cy={146}
+          rx={11}
+          ry={4.5}
+          fill="#FF8FB8"
+        />
+
+        <ellipse
+          cx={EYE_R + 8}
+          cy={146}
+          rx={11}
+          ry={4.5}
+          fill="#FF8FB8"
+        />
       </g>
     </svg>
   );
 }
 
-export default function RobotPeek() {
+export default function RobotPeek(): React.ReactElement | null {
   const prefersReducedMotion = useReducedMotion();
+
   const [corner, setCorner] = useState<Corner>(CORNERS[0]);
   const [eyes, setEyes] = useState<Eyes>("open");
   const [isReady, setIsReady] = useState(false);
@@ -147,12 +162,12 @@ export default function RobotPeek() {
 
   const isVisitingRef = useRef(false);
   const isAbortedRef = useRef(false);
-  const activeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const activeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abortResolverRef = useRef<(() => void) | null>(null);
   const activeCornerRef = useRef<Corner>(CORNERS[0]);
 
   const clearActiveTimer = useCallback(() => {
-    if (activeTimerRef.current) {
+    if (activeTimerRef.current !== null) {
       clearTimeout(activeTimerRef.current);
       activeTimerRef.current = null;
     }
@@ -167,7 +182,11 @@ export default function RobotPeek() {
     const wait = (ms: number): Promise<void> => {
       return new Promise((resolve) => {
         clearActiveTimer();
-        activeTimerRef.current = setTimeout(resolve, ms);
+
+        activeTimerRef.current = setTimeout(() => {
+          activeTimerRef.current = null;
+          resolve();
+        }, ms);
       });
     };
 
@@ -177,7 +196,7 @@ export default function RobotPeek() {
       });
     };
 
-    const runOrAbort = async <T>(
+    const runOrAbort = async <T,>(
       task: Promise<T> | T
     ): Promise<T> => {
       const result = await Promise.race([
@@ -191,7 +210,7 @@ export default function RobotPeek() {
         throw new Error("ABORT_ANIMATION");
       }
 
-      return result as T;
+      return result;
     };
 
     const triggerEmergencyRetract = () => {
@@ -204,19 +223,33 @@ export default function RobotPeek() {
       const targetHiddenY = isTop ? "-115%" : "112%";
       const targetRot = isTop ? 180 : 0;
 
+      setIsReady(false);
+
       if (botEl) {
-        animate(
+        void animate(
           botEl,
-          { y: targetHiddenY, rotate: targetRot },
-          { duration: 0.25, ease: "easeIn" }
+          {
+            y: targetHiddenY,
+            rotate: targetRot,
+          },
+          {
+            duration: 0.25,
+            ease: "easeIn",
+          }
         );
       }
 
       if (armEl) {
-        animate(armEl, { rotate: 0 }, { duration: 0.2 });
+        void animate(
+          armEl,
+          {
+            rotate: 0,
+          },
+          {
+            duration: 0.2,
+          }
+        );
       }
-
-      setIsReady(false);
     };
 
     const onScroll = () => {
@@ -226,15 +259,17 @@ export default function RobotPeek() {
 
       if (abortResolverRef.current) {
         abortResolverRef.current();
+        abortResolverRef.current = null;
       }
 
       triggerEmergencyRetract();
     };
 
-    async function blink() {
+    async function blink(): Promise<void> {
       if (isUnmounted) return;
 
       setEyes("blink");
+
       await wait(140);
 
       if (!isUnmounted) {
@@ -242,9 +277,12 @@ export default function RobotPeek() {
       }
     }
 
-    async function executeVisit() {
-      const currentCorner = CORNERS[visitIndex % CORNERS.length];
-      const currentFace = WAVE_FACES[visitIndex % WAVE_FACES.length];
+    async function executeVisit(): Promise<void> {
+      const currentCorner =
+        CORNERS[visitIndex % CORNERS.length];
+
+      const currentFace =
+        WAVE_FACES[visitIndex % WAVE_FACES.length];
 
       visitIndex += 1;
 
@@ -253,17 +291,18 @@ export default function RobotPeek() {
       isAbortedRef.current = false;
       isVisitingRef.current = true;
 
-      const isTop = currentCorner.v === "top";
-      const rot = isTop ? 180 : 0;
+      setCorner(currentCorner);
+      setEyes("open");
+      setIsReady(false);
 
+      const isTop = currentCorner.v === "top";
+
+      const rot = isTop ? 180 : 0;
       const hiddenY = isTop ? "-115%" : "112%";
       const sneakY = isTop ? "-82%" : "78%";
       const shownY = isTop ? "-30%" : "32%";
 
       try {
-        setIsReady(false);
-        setEyes("open");
-
         await runOrAbort(wait(60));
 
         const botEl = botRef.current;
@@ -273,29 +312,44 @@ export default function RobotPeek() {
 
         await animate(
           botEl,
-          { y: hiddenY, rotate: rot },
-          { duration: 0 }
+          {
+            y: hiddenY,
+            rotate: rot,
+          },
+          {
+            duration: 0,
+          }
         );
 
         await animate(
           armEl,
-          { rotate: 0 },
-          { duration: 0 }
+          {
+            rotate: 0,
+          },
+          {
+            duration: 0,
+          }
         );
 
         await runOrAbort(wait(80));
 
-        if (!isUnmounted) {
-          setIsReady(true);
-        }
+        if (isUnmounted) return;
+
+        setIsReady(true);
 
         await runOrAbort(wait(40));
 
         await runOrAbort(
           animate(
             botEl,
-            { y: sneakY, rotate: rot },
-            { duration: 0.9, ease: "easeOut" }
+            {
+              y: sneakY,
+              rotate: rot,
+            },
+            {
+              duration: 0.9,
+              ease: "easeOut",
+            }
           )
         );
 
@@ -310,8 +364,15 @@ export default function RobotPeek() {
         await runOrAbort(
           animate(
             botEl,
-            { y: shownY, rotate: rot },
-            { type: "spring", stiffness: 120, damping: 26 }
+            {
+              y: shownY,
+              rotate: rot,
+            },
+            {
+              type: "spring",
+              stiffness: 120,
+              damping: 26,
+            }
           )
         );
 
@@ -324,25 +385,41 @@ export default function RobotPeek() {
         await runOrAbort(
           animate(
             armEl,
-            { rotate: 128 },
-            { type: "spring", stiffness: 200, damping: 14 }
+            {
+              rotate: 128,
+            },
+            {
+              type: "spring",
+              stiffness: 200,
+              damping: 14,
+            }
           )
         );
 
         await runOrAbort(
           animate(
             armEl,
-            { rotate: [128, 152, 126, 152, 126, 140] },
-            { duration: 1.6, ease: "easeInOut" }
+            {
+              rotate: [128, 152, 126, 152, 126, 140],
+            },
+            {
+              duration: 1.6,
+              ease: "easeInOut",
+            }
           )
         );
 
         await runOrAbort(wait(450));
 
-        animate(
+        void animate(
           armEl,
-          { rotate: 0 },
-          { duration: 0.35, ease: "easeOut" }
+          {
+            rotate: 0,
+          },
+          {
+            duration: 0.35,
+            ease: "easeOut",
+          }
         );
 
         if (!isUnmounted) {
@@ -355,7 +432,10 @@ export default function RobotPeek() {
         await runOrAbort(
           animate(
             botEl,
-            { y: hiddenY, rotate: rot },
+            {
+              y: hiddenY,
+              rotate: rot,
+            },
             {
               duration: 0.6,
               ease: [0.5, 0, 0.75, 0],
@@ -376,7 +456,7 @@ export default function RobotPeek() {
       }
     }
 
-    async function startLoop() {
+    async function startLoop(): Promise<void> {
       await wait(FIRST_DELAY_MS);
 
       while (!isUnmounted) {
@@ -394,16 +474,20 @@ export default function RobotPeek() {
       passive: true,
     });
 
-    startLoop();
+    void startLoop();
 
     return () => {
       isUnmounted = true;
+
       clearActiveTimer();
+
       window.removeEventListener("scroll", onScroll);
     };
   }, [prefersReducedMotion, clearActiveTimer]);
 
-  if (prefersReducedMotion) return null;
+  if (prefersReducedMotion) {
+    return null;
+  }
 
   const isTop = corner.v === "top";
 
@@ -421,10 +505,12 @@ export default function RobotPeek() {
 
     ...(corner.h === "right"
       ? {
-          right: "max(0.75rem, env(safe-area-inset-right, 0px))",
+          right:
+            "max(0.75rem, env(safe-area-inset-right, 0px))",
         }
       : {
-          left: "max(0.75rem, env(safe-area-inset-left, 0px))",
+          left:
+            "max(0.75rem, env(safe-area-inset-left, 0px))",
         }),
   };
 
@@ -453,7 +539,6 @@ export default function RobotPeek() {
             "drop-shadow(0 8px 14px rgba(12,126,255,0.35))",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/robot-body.png"
           alt=""
@@ -466,7 +551,6 @@ export default function RobotPeek() {
 
         <Face eyes={eyes} />
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={armRef}
           src="/robot-arm.png"
@@ -476,9 +560,12 @@ export default function RobotPeek() {
           decoding="async"
           draggable={false}
           className="absolute inset-0 h-full w-full will-change-transform"
-          style={{ transformOrigin: SHOULDER }}
+          style={{
+            transformOrigin: SHOULDER,
+          }}
         />
       </div>
     </div>
   );
 }
+
