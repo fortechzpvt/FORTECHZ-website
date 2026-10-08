@@ -49,6 +49,7 @@ export function websiteJsonLd() {
     "@id": `${SITE_URL}/#website`,
     url: SITE_URL,
     name: SITE_NAME,
+    alternateName: "Fortechz",
     description: SITE_DESCRIPTION_DEFAULT,
     inLanguage: "en",
     publisher: { "@id": `${SITE_URL}/#organization` },
