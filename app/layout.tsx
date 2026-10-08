@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import TransitionOverlay from "@/components/TransitionOverlay";
+import RobotPeek from "@/components/RobotPeek";
 import { SITE_URL, SITE_TITLE_DEFAULT, SITE_DESCRIPTION_DEFAULT, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
 const poppins = Poppins({
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <TransitionOverlay />
         <Header />
         {children}
+        <RobotPeek />
       </body>
     </html>
   );
