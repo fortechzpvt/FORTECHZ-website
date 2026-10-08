@@ -16,15 +16,15 @@ const data: ServiceDetailData = {
   faqs: [
     {
       question: "What does enterprise software development cost?",
-      answer: "Enterprise engagements are scoped individually based on system complexity, integrations, and compliance requirements — we don't quote this without a proper discovery phase, because underscoping mission-critical software is how projects fail.",
+      answer: "Enterprise engagements are scoped individually based on system complexity, integrations, and compliance requirements. We don't quote this without a proper discovery phase, because underscoping mission-critical software is how projects fail.",
     },
     {
       question: "Do you provide ongoing monitoring and support after launch?",
-      answer: "Yes — 24/7 monitoring and an SLA are standard parts of our enterprise software engagements, not an add-on.",
+      answer: "Yes, 24/7 monitoring and an SLA are standard parts of our enterprise software engagements, not an add-on.",
     },
     {
       question: "Can you integrate with our existing systems?",
-      answer: "Yes. Most enterprise projects involve integrating with existing databases, ERPs, or third-party APIs — we design the integration layer as part of the initial architecture, not as an afterthought.",
+      answer: "Yes. Most enterprise projects involve integrating with existing databases, ERPs, or third-party APIs. We design the integration layer as part of the initial architecture, not as an afterthought.",
     },
   ],
   metaDescription: "Mission-critical enterprise software development in Sri Lanka. Cloud infrastructure, microservices architecture, CI/CD pipelines, and 99.99% uptime SLAs.",

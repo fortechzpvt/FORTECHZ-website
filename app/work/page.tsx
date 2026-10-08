@@ -4,7 +4,7 @@ import Link from "next/link";
 import Marquee from "@/components/Marquee";
 
 export const metadata: Metadata = {
-  title: "Our Work — Client Projects | Fortechz",
+  title: "Our Work | Client Projects | Fortechz",
   description:
     "Explore how Fortechz delivers custom POS systems, high-performing websites, and digital platforms across retail, tourism, and education in Sri Lanka.",
   alternates: { canonical: "/work" },

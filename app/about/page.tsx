@@ -4,7 +4,7 @@ import Link from "next/link";
 import Marquee from "@/components/Marquee";
 
 export const metadata: Metadata = {
-  title: "About Us — Our Story & Founders",
+  title: "About Us | Our Story & Founders",
   description: "Fortechz is a premium technology agency and studio founded in 2024, building custom software, websites, and digital infrastructure for Sri Lankan and global businesses.",
   alternates: { canonical: "/about" },
   openGraph: {

@@ -20,10 +20,10 @@ const data: ServiceDetailData = {
     },
     {
       question: "Can you integrate local Sri Lankan payment gateways?",
-      answer: "Yes — we integrate local and international payment gateways depending on your customer base and settlement requirements.",
+      answer: "Yes, we integrate local and international payment gateways depending on your customer base and settlement requirements.",
     },
     {
-      question: "Custom ecommerce vs. a platform like Shopify — which is right for my business?",
+      question: "Custom ecommerce vs. a platform like Shopify, which is right for my business?",
       answer: "If your needs fit standard ecommerce patterns and you want to launch fast, a hosted platform can be the pragmatic choice. If you need custom checkout logic, unusual product structures, or deep integrations with your own systems, a custom-built platform gives you full control without ongoing platform fees.",
     },
   ],

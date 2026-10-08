@@ -49,8 +49,8 @@ const services = [
 ];
 
 export const metadata: Metadata = {
-  title: "Services — Custom Software, POS, Ecommerce & Web Development",
-  description: "Explore Fortechz's services: business websites, POS systems, ecommerce platforms, web & mobile development, custom website design, and enterprise software — built for Sri Lankan and global businesses.",
+  title: "Services | Custom Software, POS, Ecommerce & Web Development",
+  description: "Explore Fortechz's services: business websites, POS systems, ecommerce platforms, web & mobile development, custom website design, and enterprise software, built for Sri Lankan and global businesses.",
   alternates: { canonical: "/services" },
   openGraph: {
     title: "Services | Fortechz",
