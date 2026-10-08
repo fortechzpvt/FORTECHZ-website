@@ -84,6 +84,6 @@ body {
 /* ─── Utilities ─────────────────────────────────────────────────────────────── */
 @layer utilities {
   .font-display { font-family: var(--font-poppins), "Poppins", system-ui, sans-serif; }
-  .font-mono    { font-family: var(--font-poppins), "Poppins", system-ui, sans-serif; }
+  .font-mono    { font-family: var(--font-poppins), "Poppins", system-ui, sans-serif; font-weight: 700; }
   .btn-glow:hover { box-shadow: 0 6px 28px -4px rgba(12, 126, 255, 0.45); }
 }
