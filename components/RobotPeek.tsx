@@ -1,18 +1,7 @@
-```tsx
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { animate, useReducedMotion } from "framer-motion";
-
-/**
- * Cute robot mascot.
- * Sneaks up from the bottom/top corners, waves,
- * changes facial expressions, and exits on user scroll interaction.
- *
- * IMPORTANT:
- * The robot is completely hidden while changing corners/orientation.
- * This prevents the 180° top-corner rotation from being visible.
- */
 
 type Eyes = "open" | "blink" | "happy" | "love" | "wink";
 type Corner = { v: "bottom" | "top"; h: "right" | "left" };
@@ -24,12 +13,7 @@ const CORNERS: readonly Corner[] = [
   { v: "top", h: "right" },
 ] as const;
 
-const WAVE_FACES: readonly Eyes[] = [
-  "happy",
-  "wink",
-  "love",
-  "happy",
-] as const;
+const WAVE_FACES: readonly Eyes[] = ["happy", "wink", "love", "happy"] as const;
 
 const HEADER_PX = 56;
 const FIRST_DELAY_MS = 3500;
@@ -105,11 +89,8 @@ function Eye({ cx, kind }: EyeProps) {
 function Face({ eyes }: { eyes: Eyes }) {
   const left = eyes === "wink" ? "open" : eyes;
   const right = eyes === "wink" ? "happy" : eyes;
-
   const showCheeks =
-    eyes === "happy" ||
-    eyes === "love" ||
-    eyes === "wink";
+    eyes === "happy" || eyes === "love" || eyes === "wink";
 
   return (
     <svg
@@ -148,21 +129,8 @@ function Face({ eyes }: { eyes: Eyes }) {
         className="transition-opacity duration-250 ease-in-out"
         style={{ opacity: showCheeks ? 0.8 : 0 }}
       >
-        <ellipse
-          cx={EYE_L - 8}
-          cy={146}
-          rx={11}
-          ry={4.5}
-          fill="#FF8FB8"
-        />
-
-        <ellipse
-          cx={EYE_R + 8}
-          cy={146}
-          rx={11}
-          ry={4.5}
-          fill="#FF8FB8"
-        />
+        <ellipse cx={EYE_L - 8} cy={146} rx={11} ry={4.5} fill="#FF8FB8" />
+        <ellipse cx={EYE_R + 8} cy={146} rx={11} ry={4.5} fill="#FF8FB8" />
       </g>
     </svg>
   );
@@ -170,25 +138,17 @@ function Face({ eyes }: { eyes: Eyes }) {
 
 export default function RobotPeek() {
   const prefersReducedMotion = useReducedMotion();
-
   const [corner, setCorner] = useState<Corner>(CORNERS[0]);
   const [eyes, setEyes] = useState<Eyes>("open");
-
-  // Controls whether the robot can be visually seen.
-  // FALSE = completely hidden while changing orientation/corner.
   const [isReady, setIsReady] = useState(false);
 
-  // Explicit element references
   const botRef = useRef<HTMLDivElement | null>(null);
   const armRef = useRef<HTMLImageElement | null>(null);
 
-  // Controller state refs
   const isVisitingRef = useRef(false);
   const isAbortedRef = useRef(false);
   const activeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const abortResolverRef = useRef<(() => void) | null>(null);
-
-  // Keeps the currently active corner available without restarting the effect.
   const activeCornerRef = useRef<Corner>(CORNERS[0]);
 
   const clearActiveTimer = useCallback(() => {
@@ -207,7 +167,6 @@ export default function RobotPeek() {
     const wait = (ms: number): Promise<void> => {
       return new Promise((resolve) => {
         clearActiveTimer();
-
         activeTimerRef.current = setTimeout(resolve, ms);
       });
     };
@@ -218,12 +177,11 @@ export default function RobotPeek() {
       });
     };
 
-    const runOrAbort = async <T,>(
+    const runOrAbort = async <T>(
       task: Promise<T> | T
     ): Promise<T> => {
       const result = await Promise.race([
         Promise.resolve(task),
-
         awaitAbortSignal().then(() => {
           throw new Error("ABORT_ANIMATION");
         }),
@@ -249,30 +207,15 @@ export default function RobotPeek() {
       if (botEl) {
         animate(
           botEl,
-          {
-            y: targetHiddenY,
-            rotate: targetRot,
-          },
-          {
-            duration: 0.25,
-            ease: "easeIn",
-          }
+          { y: targetHiddenY, rotate: targetRot },
+          { duration: 0.25, ease: "easeIn" }
         );
       }
 
       if (armEl) {
-        animate(
-          armEl,
-          {
-            rotate: 0,
-          },
-          {
-            duration: 0.2,
-          }
-        );
+        animate(armEl, { rotate: 0 }, { duration: 0.2 });
       }
 
-      // Once the emergency retract starts, keep the robot hidden.
       setIsReady(false);
     };
 
@@ -292,7 +235,6 @@ export default function RobotPeek() {
       if (isUnmounted) return;
 
       setEyes("blink");
-
       await wait(140);
 
       if (!isUnmounted) {
@@ -301,22 +243,17 @@ export default function RobotPeek() {
     }
 
     async function executeVisit() {
-      const currentCorner =
-        CORNERS[visitIndex % CORNERS.length];
-
-      const currentFace =
-        WAVE_FACES[visitIndex % WAVE_FACES.length];
+      const currentCorner = CORNERS[visitIndex % CORNERS.length];
+      const currentFace = WAVE_FACES[visitIndex % WAVE_FACES.length];
 
       visitIndex += 1;
 
-      // Store active corner for scroll/emergency handling.
       activeCornerRef.current = currentCorner;
 
       isAbortedRef.current = false;
       isVisitingRef.current = true;
 
       const isTop = currentCorner.v === "top";
-
       const rot = isTop ? 180 : 0;
 
       const hiddenY = isTop ? "-115%" : "112%";
@@ -324,22 +261,6 @@ export default function RobotPeek() {
       const shownY = isTop ? "-30%" : "32%";
 
       try {
-        /*
-         * ---------------------------------------------------------
-         * PHASE 1 — COMPLETELY HIDE ROBOT
-         * ---------------------------------------------------------
-         *
-         * This is the important fix.
-         *
-         * Before changing from one corner to another:
-         *
-         * 1. Hide robot with opacity/visibility.
-         * 2. Move it to the new corner.
-         * 3. Apply the required 180° rotation if it is a top corner.
-         *
-         * The user sees NONE of these operations.
-         */
-
         setIsReady(false);
         setEyes("open");
 
@@ -350,44 +271,19 @@ export default function RobotPeek() {
 
         if (!botEl || !armEl || isUnmounted) return;
 
-        /*
-         * Reset position and orientation while INVISIBLE.
-         */
         await animate(
           botEl,
-          {
-            y: hiddenY,
-            rotate: rot,
-          },
-          {
-            duration: 0,
-          }
+          { y: hiddenY, rotate: rot },
+          { duration: 0 }
         );
 
         await animate(
           armEl,
-          {
-            rotate: 0,
-          },
-          {
-            duration: 0,
-          }
+          { rotate: 0 },
+          { duration: 0 }
         );
 
-        /*
-         * Give the browser one frame to apply the hidden
-         * position + rotation before making the robot visible.
-         */
         await runOrAbort(wait(80));
-
-        /*
-         * ---------------------------------------------------------
-         * PHASE 2 — NOW MAKE ROBOT VISIBLE
-         * ---------------------------------------------------------
-         *
-         * The robot is already correctly positioned and rotated.
-         * Therefore the user can ONLY see the sneak-in animation.
-         */
 
         if (!isUnmounted) {
           setIsReady(true);
@@ -395,23 +291,11 @@ export default function RobotPeek() {
 
         await runOrAbort(wait(40));
 
-        /*
-         * ---------------------------------------------------------
-         * PHASE 3 — SNEAK IN
-         * ---------------------------------------------------------
-         */
-
         await runOrAbort(
           animate(
             botEl,
-            {
-              y: sneakY,
-              rotate: rot,
-            },
-            {
-              duration: 0.9,
-              ease: "easeOut",
-            }
+            { y: sneakY, rotate: rot },
+            { duration: 0.9, ease: "easeOut" }
           )
         );
 
@@ -420,39 +304,18 @@ export default function RobotPeek() {
         }
 
         await runOrAbort(wait(350));
-
         await runOrAbort(blink());
-
         await runOrAbort(wait(150));
-
-        /*
-         * ---------------------------------------------------------
-         * PHASE 4 — POP OUT
-         * ---------------------------------------------------------
-         */
 
         await runOrAbort(
           animate(
             botEl,
-            {
-              y: shownY,
-              rotate: rot,
-            },
-            {
-              type: "spring",
-              stiffness: 120,
-              damping: 26,
-            }
+            { y: shownY, rotate: rot },
+            { type: "spring", stiffness: 120, damping: 26 }
           )
         );
 
         await runOrAbort(blink());
-
-        /*
-         * ---------------------------------------------------------
-         * PHASE 5 — FACIAL EXPRESSION + WAVE
-         * ---------------------------------------------------------
-         */
 
         if (!isUnmounted) {
           setEyes(currentFace);
@@ -461,47 +324,25 @@ export default function RobotPeek() {
         await runOrAbort(
           animate(
             armEl,
-            {
-              rotate: 128,
-            },
-            {
-              type: "spring",
-              stiffness: 200,
-              damping: 14,
-            }
+            { rotate: 128 },
+            { type: "spring", stiffness: 200, damping: 14 }
           )
         );
 
         await runOrAbort(
           animate(
             armEl,
-            {
-              rotate: [128, 152, 126, 152, 126, 140],
-            },
-            {
-              duration: 1.6,
-              ease: "easeInOut",
-            }
+            { rotate: [128, 152, 126, 152, 126, 140] },
+            { duration: 1.6, ease: "easeInOut" }
           )
         );
 
         await runOrAbort(wait(450));
 
-        /*
-         * ---------------------------------------------------------
-         * PHASE 6 — GOODBYE
-         * ---------------------------------------------------------
-         */
-
         animate(
           armEl,
-          {
-            rotate: 0,
-          },
-          {
-            duration: 0.35,
-            ease: "easeOut",
-          }
+          { rotate: 0 },
+          { duration: 0.35, ease: "easeOut" }
         );
 
         if (!isUnmounted) {
@@ -509,19 +350,12 @@ export default function RobotPeek() {
         }
 
         await runOrAbort(wait(250));
-
         await runOrAbort(blink());
 
-        /*
-         * Robot retracts completely.
-         */
         await runOrAbort(
           animate(
             botEl,
-            {
-              y: hiddenY,
-              rotate: rot,
-            },
+            { y: hiddenY, rotate: rot },
             {
               duration: 0.6,
               ease: [0.5, 0, 0.75, 0],
@@ -529,18 +363,10 @@ export default function RobotPeek() {
           )
         );
 
-        /*
-         * Hide it after it has completely disappeared.
-         */
         if (!isUnmounted) {
           setIsReady(false);
         }
-      } catch (err) {
-        /*
-         * Animation was aborted because of:
-         * - user scrolling
-         * - component unmount
-         */
+      } catch {
       } finally {
         isVisitingRef.current = false;
 
@@ -572,9 +398,7 @@ export default function RobotPeek() {
 
     return () => {
       isUnmounted = true;
-
       clearActiveTimer();
-
       window.removeEventListener("scroll", onScroll);
     };
   }, [prefersReducedMotion, clearActiveTimer]);
@@ -597,12 +421,10 @@ export default function RobotPeek() {
 
     ...(corner.h === "right"
       ? {
-          right:
-            "max(0.75rem, env(safe-area-inset-right, 0px))",
+          right: "max(0.75rem, env(safe-area-inset-right, 0px))",
         }
       : {
-          left:
-            "max(0.75rem, env(safe-area-inset-left, 0px))",
+          left: "max(0.75rem, env(safe-area-inset-left, 0px))",
         }),
   };
 
@@ -612,25 +434,7 @@ export default function RobotPeek() {
       className="pointer-events-none fixed z-30 select-none"
       style={{
         ...positionStyle,
-
-        /*
-         * CRITICAL:
-         *
-         * While changing corners/orientation, the entire robot
-         * is invisible.
-         *
-         * This prevents the user from seeing:
-         * - the 180° top rotation
-         * - position changes
-         * - orientation changes
-         * - reset animations
-         */
         opacity: isReady ? 1 : 0,
-
-        /*
-         * Opacity transition is disabled so there is no
-         * visible fade during the orientation change.
-         */
         transition: "none",
       }}
     >
@@ -639,19 +443,12 @@ export default function RobotPeek() {
         className="relative will-change-transform"
         style={{
           aspectRatio: `${VB_W} / ${VB_H}`,
-
-          /*
-           * Initial transform only.
-           * Framer Motion takes control during the animation.
-           */
           transform: `translateY(${
             isTop ? "-115%" : "112%"
           }) rotate(${isTop ? 180 : 0}deg)`,
-
           transformOrigin: isTop
             ? "50% 50%"
             : "50% 100%",
-
           filter:
             "drop-shadow(0 8px 14px rgba(12,126,255,0.35))",
         }}
@@ -679,12 +476,9 @@ export default function RobotPeek() {
           decoding="async"
           draggable={false}
           className="absolute inset-0 h-full w-full will-change-transform"
-          style={{
-            transformOrigin: SHOULDER,
-          }}
+          style={{ transformOrigin: SHOULDER }}
         />
       </div>
     </div>
   );
 }
-```
