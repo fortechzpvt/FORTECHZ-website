@@ -39,11 +39,7 @@ export default function LeftPanel() {
         <div className="anim-up" style={{ animationDelay: "0.38s" }}>
           <Link
             href="/work"
-            className="group inline-flex items-center gap-3.5 pl-1.5 pr-5 py-1.5
-                      border border-accent/20 rounded-full
-                      backdrop-blur-sm bg-accent/5
-                      hover:bg-accent/15 hover:border-accent/40
-                      transition-all duration-300 cursor-pointer"
+            className="group btn-glass !pl-1.5 !pr-5 !py-1.5 !gap-3.5"
             aria-label="View Fortechz case studies"
           >
             <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110">

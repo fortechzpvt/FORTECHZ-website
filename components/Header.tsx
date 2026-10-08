@@ -87,8 +87,8 @@ export default function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-canvas/90 backdrop-blur-md border-b border-ink/10"
-            : "bg-canvas/70 backdrop-blur-sm"
+            ? "bg-canvas/75 backdrop-blur-xl border-b border-ink/10 shadow-[inset_0_-1px_0_rgba(255,255,255,0.06)]"
+            : "bg-canvas/40 backdrop-blur-md"
         }`}
       >
         <div className="flex items-center justify-between px-6 md:px-10 h-14">
@@ -126,8 +126,8 @@ export default function Header() {
                 <Link
                   key={label}
                   href={href}
-                  className={`font-mono text-[0.62rem] tracking-[0.14em] uppercase transition-colors duration-200 ${
-                    pathname === href ? "text-ink" : "text-ink/50 hover:text-ink"
+                  className={`font-mono text-[0.62rem] tracking-[0.14em] uppercase px-3.5 py-1.5 rounded-full border transition-all duration-200 ${
+                    pathname === href ? "text-ink bg-accent/10 border-accent/25" : "text-ink/55 border-transparent hover:text-ink hover:bg-ink/5"
                   }`}
                 >
                   {label}
@@ -140,9 +140,7 @@ export default function Header() {
               <button
                 onClick={toggleTheme}
                 aria-label={isDark ? "Switch to bright mode" : "Switch to dark mode"}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 border border-ink/15
-                           hover:border-accent/60 text-ink/50 hover:text-accent
-                           transition-all duration-200 rounded-sm"
+                className="btn-glass !px-3 !py-1.5 !gap-1.5"
               >
                 {isDark ? <SunIcon /> : <MoonIcon />}
                 <span className="font-mono text-[0.52rem] tracking-[0.14em] uppercase hidden sm:inline">
@@ -154,7 +152,7 @@ export default function Header() {
             {/* Hamburger */}
             <button
               onClick={() => setMenuOpen((p) => !p)}
-              className="flex flex-col justify-center gap-[5px] w-8 h-8 cursor-pointer"
+              className="btn-glass-icon flex-col !gap-[5px]"
               aria-label="Toggle navigation menu"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
@@ -209,8 +207,7 @@ export default function Header() {
               {mounted && (
                 <button
                   onClick={toggleTheme}
-                  className="flex items-center gap-2 px-3 py-1.5 border border-ink/15
-                             hover:border-accent text-ink/40 hover:text-ink transition-colors duration-200"
+                  className="btn-glass !px-4 !py-2"
                 >
                   {isDark ? <SunIcon /> : <MoonIcon />}
                   <span className="font-mono text-[0.55rem] tracking-[0.14em] uppercase">

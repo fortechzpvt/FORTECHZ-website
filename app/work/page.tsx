@@ -132,10 +132,7 @@ export default function WorkPage() {
         </div>
         <Link
           href="/contact"
-          className="font-mono text-xs tracking-[0.14em] uppercase
-                     px-6 py-3.5 bg-accent text-canvas btn-glow
-                     hover:bg-accent/90
-                     transition-all duration-300"
+          className="btn-glass-primary"
         >
           Start a project
         </Link>

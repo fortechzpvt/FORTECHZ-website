@@ -21,7 +21,7 @@ export default function RightPanel() {
         <div className="flex items-center justify-end gap-3">
           <button
             onClick={goPrev}
-            className="font-mono text-sm tracking-[0.22em] text-ink/40 hover:text-accent transition-colors duration-200 uppercase"
+            className="btn-glass-icon"
             aria-label="Previous slide"
           >
             P
@@ -34,7 +34,7 @@ export default function RightPanel() {
           </div>
           <button
             onClick={goNext}
-            className="font-mono text-sm tracking-[0.22em] text-ink hover:text-accent transition-colors duration-200 uppercase"
+            className="btn-glass-icon"
             aria-label="Next slide"
           >
             N
