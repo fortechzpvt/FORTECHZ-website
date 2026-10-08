@@ -69,6 +69,7 @@ function Eye({ cx, kind }: EyeProps) {
         fill={EYE_FILL}
         className="transition-all duration-150 ease-in-out"
       />
+
       {kind === "open" && (
         <ellipse
           cx={cx - 7}
@@ -86,7 +87,8 @@ function Eye({ cx, kind }: EyeProps) {
 function Face({ eyes }: { eyes: Eyes }) {
   const left = eyes === "wink" ? "open" : eyes;
   const right = eyes === "wink" ? "happy" : eyes;
-  const showCheeks = eyes === "happy" || eyes === "love" || eyes === "wink";
+  const showCheeks =
+    eyes === "happy" || eyes === "love" || eyes === "wink";
 
   return (
     <svg
@@ -126,6 +128,7 @@ function Face({ eyes }: { eyes: Eyes }) {
           ry={4.5}
           fill="#FF8FB8"
         />
+
         <ellipse
           cx={EYE_R + 8}
           cy={146}
@@ -143,7 +146,7 @@ export default function RobotPeek(): React.ReactElement | null {
 
   const [corner, setCorner] = useState<Corner>(CORNERS[0]);
   const [eyes, setEyes] = useState<Eyes>("open");
-  const [isReady, setIsReady] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const botRef = useRef<HTMLDivElement | null>(null);
   const armRef = useRef<HTMLImageElement | null>(null);
@@ -205,15 +208,17 @@ export default function RobotPeek(): React.ReactElement | null {
       const activeCorner = currentCornerRef.current;
 
       const isTop = activeCorner.v === "top";
-      const targetHiddenY = isTop ? "-115%" : "112%";
-      const targetRot = isTop ? 180 : 0;
+      const hiddenY = isTop ? "-115%" : "112%";
+      const rot = isTop ? 180 : 0;
+
+      setIsVisible(false);
 
       if (botEl) {
         void animate(
           botEl,
           {
-            y: targetHiddenY,
-            rotate: targetRot,
+            y: hiddenY,
+            rotate: rot,
           },
           {
             duration: 0.25,
@@ -245,7 +250,6 @@ export default function RobotPeek(): React.ReactElement | null {
         abortResolverRef.current = null;
       }
 
-      setIsReady(false);
       triggerEmergencyRetract();
     };
 
@@ -272,7 +276,7 @@ export default function RobotPeek(): React.ReactElement | null {
       isAbortedRef.current = false;
       isVisitingRef.current = true;
 
-      setIsReady(false);
+      setIsVisible(false);
       setCorner(currentCorner);
       setEyes("open");
 
@@ -287,6 +291,7 @@ export default function RobotPeek(): React.ReactElement | null {
         const isTop = currentCorner.v === "top";
 
         const rot = isTop ? 180 : 0;
+
         const sneakRotate = isTop ? 174 : 6;
 
         const hiddenY = isTop ? "-115%" : "112%";
@@ -316,7 +321,17 @@ export default function RobotPeek(): React.ReactElement | null {
 
         if (isUnmounted || isAbortedRef.current) return;
 
-        setIsReady(true);
+        await new Promise<void>((resolve) => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              resolve();
+            });
+          });
+        });
+
+        if (isUnmounted || isAbortedRef.current) return;
+
+        setIsVisible(true);
 
         await runOrAbort(
           animate(
@@ -347,15 +362,11 @@ export default function RobotPeek(): React.ReactElement | null {
           )
         );
 
-        if (!isUnmounted) {
-          setEyes("open");
-        }
-
         await runOrAbort(wait(350));
-        await runOrAbort(blink());
-        await runOrAbort(wait(150));
 
         await runOrAbort(blink());
+
+        await runOrAbort(wait(150));
 
         if (!isUnmounted) {
           setEyes(currentFace);
@@ -406,6 +417,7 @@ export default function RobotPeek(): React.ReactElement | null {
         }
 
         await runOrAbort(wait(250));
+
         await runOrAbort(blink());
 
         await runOrAbort(
@@ -422,9 +434,9 @@ export default function RobotPeek(): React.ReactElement | null {
           )
         );
 
-        setIsReady(false);
+        setIsVisible(false);
       } catch {
-        setIsReady(false);
+        setIsVisible(false);
       } finally {
         isVisitingRef.current = false;
 
@@ -474,6 +486,7 @@ export default function RobotPeek(): React.ReactElement | null {
 
   const positionStyle: React.CSSProperties = {
     width: "clamp(55px, 10vw, 109px)",
+
     ...(isTop
       ? {
           top: `calc(${HEADER_PX}px + env(safe-area-inset-top, 0px))`,
@@ -482,6 +495,7 @@ export default function RobotPeek(): React.ReactElement | null {
       : {
           bottom: 0,
         }),
+
     ...(corner.h === "right"
       ? {
           right: "max(0.75rem, env(safe-area-inset-right, 0px))",
@@ -497,7 +511,7 @@ export default function RobotPeek(): React.ReactElement | null {
       className="pointer-events-none fixed z-30 select-none"
       style={{
         ...positionStyle,
-        opacity: isReady ? 1 : 0,
+        opacity: isVisible ? 1 : 0,
       }}
     >
       <div
@@ -505,7 +519,9 @@ export default function RobotPeek(): React.ReactElement | null {
         className="relative will-change-transform"
         style={{
           aspectRatio: `${VB_W} / ${VB_H}`,
-          transform: `translateY(${isTop ? "-115%" : "112%"}) rotate(${isTop ? 180 : 0}deg)`,
+          transform: `translateY(${isTop ? "-115%" : "112%"}) rotate(${
+            isTop ? 180 : 0
+          }deg)`,
           transformOrigin: isTop ? "50% 50%" : "50% 100%",
           filter: "drop-shadow(0 8px 14px rgba(12,126,255,0.35))",
         }}
