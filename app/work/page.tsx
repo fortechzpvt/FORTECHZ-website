@@ -4,18 +4,30 @@ import Link from "next/link";
 import Marquee from "@/components/Marquee";
 
 export const metadata: Metadata = {
-  title: "Our Work — Client Projects",
-  description: "See how Fortechz has delivered POS systems, business websites, and tourism platforms for clients in Sri Lanka, including Nalini Book Shop, Noble Path Tourism, and Wilpattu Wild Adventures.",
+  title: "Our Work — Client Projects | Fortechz",
+  description:
+    "Explore how Fortechz delivers custom POS systems, high-performing websites, and digital platforms across retail, tourism, and education in Sri Lanka.",
   alternates: { canonical: "/work" },
   openGraph: {
     title: "Our Work | Fortechz",
-    description: "Client projects delivered by Fortechz across retail, tourism, and hospitality in Sri Lanka.",
+    description:
+      "Client projects delivered by Fortechz across retail, tourism, and hospitality in Sri Lanka.",
     url: "/work",
     images: ["/og-image.png"],
   },
 };
 
-const projects = [
+interface Project {
+  index: string;
+  client: string;
+  type: string;
+  year: string;
+  desc: string;
+  tags: string[];
+  link: string;
+}
+
+const projects: Project[] = [
   {
     index: "01",
     client: "Nalini Book Shop",
@@ -23,6 +35,7 @@ const projects = [
     year: "2026",
     desc: "Custom point of sale system built for everyday retail operations, covering inventory tracking, billing, and sales records in one streamlined interface.",
     tags: ["POS", "Inventory", "Billing", "Retail"],
+    link: "https://shopnalini.com/",
   },
   {
     index: "02",
@@ -31,6 +44,7 @@ const projects = [
     year: "2026",
     desc: "A tourism website showcasing travel packages and destinations, built to give visitors a fast, clear way to explore offerings and get in touch.",
     tags: ["Tourism", "Web Design", "Responsive"],
+    link: "https://www.noblepathsrilanka.com/",
   },
   {
     index: "03",
@@ -39,31 +53,66 @@ const projects = [
     year: "2026",
     desc: "A wildlife safari and adventure tour website designed to showcase experiences and drive bookings for excursions based in Wilpattu.",
     tags: ["Tourism", "Web Design", "Responsive"],
+    link: "https://willpattuwildadventures.com/",
+  },
+  {
+    index: "04",
+    client: "Sakura Pre-School",
+    type: "Website",
+    year: "2026",
+    desc: "An engaging educational platform built for Sakura Pre-School to highlight programs, daily routines, and school facilities for prospective parents.",
+    tags: ["PreSchool", "Web Design", "Responsive", "Education"],
+    link: "https://sakura-pre-school.vercel.app/#top",
+  },
+  {
+    index: "05",
+    client: "Nalini Group",
+    type: "Website",
+    year: "2026",
+    desc: "This website connect all the services in Nalini Group ",
+    tags: ["Business Group", "Web Design", "Responsive", "Hub"],
+    link: "https://shopnalini.com/",
   },
 ];
 
 export default function WorkPage() {
+  const projectCount = projects.length.toString().padStart(2, "0");
+
   return (
     <main className="min-h-screen bg-canvas pt-14">
       <BreadcrumbJsonLd name="Work" path="/work" />
 
-      {/* Page header */}
+      {/* Page Header */}
       <section className="px-6 md:px-10 lg:px-16 pt-20 pb-16 border-b border-ink/10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           <div className="md:col-span-7">
-            <p className="font-mono text-xs tracking-[0.22em] text-ink/40 uppercase mb-5 anim-up" style={{ animationDelay: "0.05s" }}>
+            <p
+              className="font-mono text-xs tracking-[0.22em] text-ink/40 uppercase mb-5 anim-up"
+              style={{ animationDelay: "0.05s" }}
+            >
               Fortechz · Selected Work
             </p>
-            <h1 className="font-display font-bold text-ink text-6xl md:text-8xl lg:text-9xl tracking-[-0.05em] uppercase leading-[0.85] anim-up" style={{ animationDelay: "0.12s" }}>
+            <h1
+              className="font-display font-bold text-ink text-6xl md:text-8xl lg:text-9xl tracking-[-0.05em] uppercase leading-[0.85] anim-up"
+              style={{ animationDelay: "0.12s" }}
+            >
               Our<br />Projects
             </h1>
           </div>
           <div className="md:col-span-5 flex flex-col justify-end">
-            <p className="font-mono text-sm text-ink/55 leading-[1.9] anim-up" style={{ animationDelay: "0.22s" }}>
+            <p
+              className="font-mono text-sm text-ink/55 leading-[1.9] anim-up"
+              style={{ animationDelay: "0.22s" }}
+            >
               A curated selection of systems we&apos;ve architected for clients who demand performance, precision, and longevity.
             </p>
-            <div className="mt-6 flex items-center gap-3 anim-up" style={{ animationDelay: "0.28s" }}>
-              <span className="font-mono text-xs text-ink/25 tracking-[0.18em] uppercase">03 Projects</span>
+            <div
+              className="mt-6 flex items-center gap-3 anim-up"
+              style={{ animationDelay: "0.28s" }}
+            >
+              <span className="font-mono text-xs text-ink/25 tracking-[0.18em] uppercase">
+                {projectCount} Projects
+              </span>
               <div className="flex-1 h-px bg-ink/10" />
             </div>
           </div>
@@ -73,29 +122,36 @@ export default function WorkPage() {
       {/* Marquee */}
       <Marquee />
 
-      {/* Projects list */}
+      {/* Projects List */}
       <section className="px-6 md:px-10 lg:px-16 py-4">
         {projects.map((p, i) => (
-          <div
+          <a
             key={p.index}
-            className="border-b border-ink/[0.07] py-10 md:py-14 group anim-up"
+            href={p.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block border-b border-ink/[0.07] py-10 md:py-14 group anim-up transition-colors duration-200"
             style={{ animationDelay: `${0.08 + i * 0.06}s` }}
           >
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10">
-              {/* Left: index + year */}
+              {/* Left: Index + Year */}
               <div className="md:col-span-2 flex md:flex-col gap-4 md:gap-2">
-                <span className="font-mono text-xs tracking-[0.22em] text-ink/20 uppercase">{p.index}</span>
-                <span className="font-mono text-xs tracking-[0.14em] text-ink/30 uppercase">{p.year}</span>
+                <span className="font-mono text-xs tracking-[0.22em] text-ink/20 uppercase">
+                  {p.index}
+                </span>
+                <span className="font-mono text-xs tracking-[0.14em] text-ink/30 uppercase">
+                  {p.year}
+                </span>
               </div>
 
-              {/* Center: content */}
+              {/* Center: Content */}
               <div className="md:col-span-7 space-y-4">
                 <div>
                   <p className="font-mono text-xs tracking-[0.14em] text-accent uppercase mb-2 flex items-center gap-2">
                     <span className="block w-4 h-px bg-accent" />
                     {p.type}
                   </p>
-                  <h2 className="font-display font-bold text-ink text-3xl md:text-4xl tracking-[-0.04em] uppercase">
+                  <h2 className="font-display font-bold text-ink text-3xl md:text-4xl tracking-[-0.04em] uppercase group-hover:text-accent transition-colors duration-300">
                     {p.client}
                   </h2>
                 </div>
@@ -104,31 +160,50 @@ export default function WorkPage() {
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {p.tags.map((tag) => (
-                    <span key={tag} className="font-mono text-xs tracking-[0.1em] text-ink/40 uppercase px-3 py-1 border border-ink/[0.1]">
+                    <span
+                      key={tag}
+                      className="font-mono text-xs tracking-[0.1em] text-ink/40 uppercase px-3 py-1 border border-ink/[0.1]"
+                    >
                       {tag}
                     </span>
                   ))}
                 </div>
               </div>
 
-              {/* Right: arrow */}
+              {/* Right: Interactive Arrow */}
               <div className="hidden md:flex md:col-span-3 items-center justify-end">
                 <div className="w-10 h-10 border border-ink/12 flex items-center justify-center group-hover:border-accent group-hover:bg-accent transition-all duration-300">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="text-ink/25 group-hover:text-canvas transition-colors duration-300">
-                    <path d="M3 11L11 3M11 3H6M11 3v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    aria-hidden="true"
+                    className="text-ink/25 group-hover:text-canvas transition-colors duration-300 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  >
+                    <path
+                      d="M3 11L11 3M11 3H6M11 3v5"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </div>
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </section>
 
       {/* CTA */}
       <section className="px-6 md:px-10 lg:px-16 py-16 border-t border-ink/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div>
-          <p className="font-display font-bold text-ink text-2xl tracking-[-0.04em] uppercase">Ready to be next?</p>
-          <p className="font-mono text-sm text-ink/45 mt-1">We take a limited number of new projects each quarter.</p>
+          <p className="font-display font-bold text-ink text-2xl tracking-[-0.04em] uppercase">
+            Ready to be next?
+          </p>
+          <p className="font-mono text-sm text-ink/45 mt-1">
+            We take a limited number of new projects each quarter.
+          </p>
         </div>
         <Link
           href="/contact"
