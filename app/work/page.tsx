@@ -6,7 +6,7 @@ import Marquee from "@/components/Marquee";
 export const metadata: Metadata = {
   title: "Our Work | Client Projects | Fortechz",
   description:
-    "Explore how Fortechz delivers custom POS systems, high-performing websites, and digital platforms across retail, tourism, and education in Sri Lanka.",
+    "Explore how Fortechz delivers custom POS systems, high performing websites, and digital platforms across retail, tourism, and education in Sri Lanka.",
   alternates: { canonical: "/work" },
   openGraph: {
     title: "Our Work | Fortechz",
@@ -57,10 +57,10 @@ const projects: Project[] = [
   },
   {
     index: "04",
-    client: "Sakura Pre-School",
+    client: "Sakura Preschool",
     type: "Website",
     year: "2026",
-    desc: "An engaging educational platform built for Sakura Pre-School to highlight programs, daily routines, and school facilities for prospective parents.",
+    desc: "An engaging educational platform built for Sakura Preschool to highlight programs, daily routines, and school facilities for prospective parents.",
     tags: ["PreSchool", "Web Design", "Responsive", "Education"],
     link: "https://sakura-pre-school.vercel.app/#top",
   },

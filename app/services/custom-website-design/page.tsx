@@ -16,7 +16,7 @@ const data: ServiceDetailData = {
   faqs: [
     {
       question: "What's the difference between a custom website and a template website?",
-      answer: "A template website starts from a pre-built layout you customize within its limits. A custom website is designed and coded from scratch around your brand and requirements, with no structural constraints, it costs more and takes longer, but gives you full control over design and performance.",
+      answer: "A template website starts from a pre built layout you customize within its limits. A custom website is designed and coded from scratch around your brand and requirements, with no structural constraints, it costs more and takes longer, but gives you full control over design and performance.",
     },
     {
       question: "How much does a custom website cost?",
@@ -24,10 +24,10 @@ const data: ServiceDetailData = {
     },
     {
       question: "How long does a custom website build take?",
-      answer: "Most custom website design and build projects run 4 to 10 weeks depending on scope, from design sign-off through development, review, and launch.",
+      answer: "Most custom website design and build projects run 4 to 10 weeks depending on scope, from design sign off through development, review, and launch.",
     },
   ],
-  metaDescription: "Bespoke website design and development in Sri Lanka. Custom UI/UX, 3D and interactive elements, and performance-first builds, no templates.",
+  metaDescription: "Bespoke website design and development in Sri Lanka. Custom UI/UX, 3D and interactive elements, and performance first builds, no templates.",
 };
 
 export const metadata: Metadata = {

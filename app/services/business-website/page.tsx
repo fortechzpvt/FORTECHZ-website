@@ -9,10 +9,10 @@ const data: ServiceDetailData = {
   tagline: "A clean, fast, professionally crafted website for your business, built to convert visitors into clients.",
   intro: [
     "Fortechz designs and builds affordable business websites for companies across Sri Lanka that need a fast, credible online presence without the overhead of a large agency retainer.",
-    "Every business website we ship is performance-first and mobile-optimized from day one, with a structure built for search engines from the ground up, so your site is easy to find, not just easy to look at.",
-    "Whether you're a first-time small business owner or replacing an outdated site, we scope the build to what actually moves the needle: clarity, speed, and a clear path to contact you.",
+    "Every business website we ship is performance first and mobile optimized from day one, with a structure built for search engines from the ground up, so your site is easy to find, not just easy to look at.",
+    "Whether you're a first time small business owner or replacing an outdated site, we scope the build to what actually moves the needle: clarity, speed, and a clear path to contact you.",
   ],
-  features: ["Responsive design", "SEO-ready structure", "Contact & enquiry forms", "CMS integration"],
+  features: ["Responsive design", "SEO ready structure", "Contact & enquiry forms", "CMS integration"],
   faqs: [
     {
       question: "How much does a business website cost in Sri Lanka?",
@@ -24,10 +24,10 @@ const data: ServiceDetailData = {
     },
     {
       question: "Do I need a custom website or is a template enough?",
-      answer: "If you need something live quickly on a tight budget, a well-built template site is a reasonable starting point. If your brand, layout, or functionality needs are specific, our Custom Website Design & Build service is the better fit.",
+      answer: "If you need something live quickly on a tight budget, a well built template site is a reasonable starting point. If your brand, layout, or functionality needs are specific, our Custom Website Design & Build service is the better fit.",
     },
   ],
-  metaDescription: "Fast, professional business website design in Sri Lanka. Mobile-optimized, SEO-ready, and built to convert. Get a fixed quote from Fortechz within one business day.",
+  metaDescription: "Fast, professional business website design in Sri Lanka. Mobile optimized, SEO ready, and built to convert. Get a fixed quote from Fortechz within one business day.",
 };
 
 export const metadata: Metadata = {
