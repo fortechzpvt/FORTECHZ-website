@@ -4,9 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useAnimate, useReducedMotion } from "framer-motion";
 
 /**
- * Cute robot mascot. Visits the four corners in turn: it pops up from the
- * bottom corners and drops in from under the header at the top corners, waves
- * with one arm, changes its facial expression, then leaves again.
+ * Cute robot mascot. Peeks up from the bottom corners in turn, waves with one arm,
+ * changes its facial expression, then leaves. Any scroll sends it away at once.
  * Decorative only: ignores pointer events and is hidden from assistive tech.
  */
 
@@ -24,9 +23,9 @@ const CORNERS: Corner[] = [
 // Expression used while waving, per visit.
 const WAVE_FACES: Eyes[] = ["happy", "wink", "love", "happy"];
 
+const HEADER_PX = 56; // matches h-14 header
 const FIRST_DELAY_MS = 3500;
 const REPEAT_EVERY_MS = 30000;
-const HEADER_PX = 56; // matches h-14 header
 
 // Geometry of the artwork (365 x 420 canvas)
 const VB_W = 365;
@@ -112,11 +111,32 @@ export default function RobotPeek() {
     let cancelled = false;
     let timer: number | undefined;
     let visitIndex = 0;
+    let aborted = false;
+    let abortNow: () => void = () => {};
+    const abortSignal = () => new Promise<void>((r) => (abortNow = r));
+    // Race every step against a scroll abort so the robot never lingers.
+    const run = async <T,>(p: Promise<T> | T) => {
+      await Promise.race([Promise.resolve(p), abortSignal()]);
+      if (aborted) throw new Error("abort");
+    };
 
     const wait = (ms: number) =>
       new Promise<void>((resolve) => {
         timer = window.setTimeout(resolve, ms);
       });
+
+    const onScroll = () => {
+      if (!visiting || aborted) return;
+      aborted = true;
+      abortNow();
+      const b = body();
+      const a = arm();
+      if (b) animate(b, { y: hiddenY, rotate: hiddenRot }, { duration: 0.25, ease: "easeIn" });
+      if (a) animate(a, { rotate: 0 }, { duration: 0.2 });
+    };
+    let visiting = false;
+    let hiddenY = "112%";
+    let hiddenRot = 0;
 
     const body = () => scope.current?.querySelector("[data-bot]") as HTMLElement | null;
     const arm = () => scope.current?.querySelector("[data-arm]") as HTMLElement | null;
@@ -132,53 +152,57 @@ export default function RobotPeek() {
       const c = CORNERS[visitIndex % CORNERS.length];
       const face = WAVE_FACES[visitIndex % WAVE_FACES.length];
       visitIndex += 1;
+      aborted = false;
+      visiting = true;
       setCorner(c);
       setEyes("open");
-      await wait(60); // let the corner position apply
-      const b = body();
-      const a = arm();
-      if (cancelled || !b || !a) return;
+      try {
+        await run(wait(60)); // let the corner position apply
+        const b = body();
+        const a = arm();
+        if (cancelled || !b || !a) return;
 
-      const top = c.v === "top";
-      // Top corners: hang upside down from under the header.
-      const rot = top ? 180 : 0; // no sideways tilt, so it never looks like it is sliding
-      const hidden = top ? "-115%" : "112%";
-      const sneak = top ? "-82%" : "78%"; // first, cautious look
-      const shown = top ? "-30%" : "32%"; // then a proper peek
+        // Top corners: hang upside down from under the header, same motion as the bottom.
+        const top = c.v === "top";
+        const rot = top ? 180 : 0;
+        const hidden = top ? "-115%" : "112%";
+        const sneak = top ? "-82%" : "78%"; // first, cautious look
+        const shown = top ? "-30%" : "32%"; // then a proper peek
+        hiddenY = hidden;
+        hiddenRot = rot;
 
-      await animate(b, { y: hidden, rotate: rot }, { duration: 0 });
-      await animate(a, { rotate: 0 }, { duration: 0 });
+        await animate(b, { y: hidden, rotate: rot }, { duration: 0 });
+        await animate(a, { rotate: 0 }, { duration: 0 });
 
-      // Sneak in slowly, look around, then pop out further.
-      await animate(b, { y: sneak, rotate: rot }, { duration: 0.9, ease: "easeOut" });
-      setEyes("open");
-      await wait(350);
-      await blink();
-      await wait(150);
-      await animate(b, { y: shown, rotate: rot }, spring);
-      await blink();
-      if (cancelled) return;
+        // Sneak in slowly, look around, then pop out further.
+        await run(animate(b, { y: sneak, rotate: rot }, { duration: 0.9, ease: "easeOut" }));
+        setEyes("open");
+        await run(wait(350));
+        await run(blink());
+        await run(wait(150));
+        await run(animate(b, { y: shown, rotate: rot }, spring));
+        await run(blink());
 
-      // Wave with a happy face.
-      setEyes(face);
-      await animate(a, { rotate: 128 }, { type: "spring", stiffness: 200, damping: 14 });
-      await animate(
-        a,
-        { rotate: [128, 152, 126, 152, 126, 140] },
-        { duration: 1.6, ease: "easeInOut" }
-      );
-      await wait(450);
+        // Wave with a happy face.
+        setEyes(face);
+        await run(animate(a, { rotate: 128 }, { type: "spring", stiffness: 200, damping: 14 }));
+        await run(
+          animate(a, { rotate: [128, 152, 126, 152, 126, 140] }, { duration: 1.6, ease: "easeInOut" })
+        );
+        await run(wait(450));
 
-      // Bye: lower the arm, blink, leave.
-      animate(a, { rotate: 0 }, { duration: 0.35, ease: "easeOut" });
-      setEyes("open");
-      await wait(250);
-      await blink();
-      await animate(
-        b,
-        { y: hidden, rotate: rot },
-        { duration: 0.6, ease: [0.5, 0, 0.75, 0] }
-      );
+        // Bye: lower the arm, blink, leave.
+        animate(a, { rotate: 0 }, { duration: 0.35, ease: "easeOut" });
+        setEyes("open");
+        await run(wait(250));
+        await run(blink());
+        await run(animate(b, { y: hidden, rotate: rot }, { duration: 0.6, ease: [0.5, 0, 0.75, 0] }));
+      } catch {
+        // Aborted by scrolling: the robot has already been sent away.
+      } finally {
+        visiting = false;
+        setEyes("open");
+      }
     }
 
     async function loop() {
@@ -190,9 +214,11 @@ export default function RobotPeek() {
       }
     }
 
+    window.addEventListener("scroll", onScroll, { passive: true });
     loop();
     return () => {
       cancelled = true;
+      window.removeEventListener("scroll", onScroll);
       if (timer) clearTimeout(timer);
     };
   }, [reduce, animate, scope]);
@@ -205,7 +231,7 @@ export default function RobotPeek() {
     ...(top
       ? {
           top: `calc(${HEADER_PX}px + env(safe-area-inset-top, 0px))`,
-          // Hide anything above the header edge so the robot appears from under it.
+          // Nothing shows above the header edge, so it appears from under it.
           clipPath: "inset(0 -120px -120% -120px)",
         }
       : { bottom: 0 }),
