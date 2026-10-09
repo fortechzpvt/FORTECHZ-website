@@ -15,6 +15,18 @@ export default {
         muted:  "rgb(var(--muted-rgb)  / <alpha-value>)",
         line:   "rgb(var(--line-rgb)   / <alpha-value>)",
         accent: "#0C7EFF",
+        // POS demo theme tokens, set per-session by components/PosDemo.tsx
+        pos:     "rgb(var(--pos-fg)    / <alpha-value>)",
+        posbg:   "rgb(var(--pos-bg)    / <alpha-value>)",
+        poscard: "rgb(var(--pos-card)  / <alpha-value>)",
+        posinset:"rgb(var(--pos-inset) / <alpha-value>)",
+        posside: "rgb(var(--pos-side)  / <alpha-value>)",
+        acc: {
+          300: "rgb(var(--acc-300) / <alpha-value>)",
+          400: "rgb(var(--acc-400) / <alpha-value>)",
+          500: "rgb(var(--acc-500) / <alpha-value>)",
+          600: "rgb(var(--acc-600) / <alpha-value>)",
+        },
       },
       fontFamily: {
         display: ['var(--font-poppins)', '"Poppins"', "system-ui", "sans-serif"],

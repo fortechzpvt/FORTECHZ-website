@@ -4,7 +4,7 @@ import PosDemo from "@/components/PosDemo";
 
 export const metadata: Metadata = {
   title: "Experience the POS System",
-  description: "Try a live, view only demo of the Fortechz POS system, with sample sales, inventory and reports.",
+  description: "Try a live demo of the Fortechz POS system, fully customised to your preference, with sample sales, inventory, tax and reports.",
   alternates: { canonical: "/services/pos-systems/experience" },
   robots: { index: false, follow: true },
 };
@@ -23,7 +23,7 @@ export default function PosExperiencePage() {
         <p className="font-mono text-xs tracking-[0.22em] text-ink/40 uppercase mb-4">Live demo</p>
         <h1 className="font-display font-bold text-ink text-4xl md:text-6xl tracking-[-0.05em] uppercase leading-[0.95]">Experience the POS</h1>
         <p className="font-mono text-sm text-ink/55 leading-[1.9] mt-5">
-          Sign in with the demo credentials and explore the dashboard, reports, stock and more with sample data. It is view only, so feel free to click around.
+          Sign in with the demo credentials and explore the dashboard, reports, stock and more with sample data. Everything is fully customised to your preference, so open Settings to switch between dark and bright mode, change colours, move the sidebar and set your own tax rates. Adding products is disabled in this view only demo.
         </p>
       </header>
       <section className="px-4 sm:px-6 md:px-10 lg:px-16">
