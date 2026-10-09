@@ -148,7 +148,6 @@ const SUPPLIERS = [
 
 const STAFF = [
   ["admin", "Manager", "Full access", "Active"],
-  ["Pakaya", "Cashier", "Checkout, Tables", "Active"],
   ["Nimal", "Barista", "Checkout", "Off shift"],
 ];
 
