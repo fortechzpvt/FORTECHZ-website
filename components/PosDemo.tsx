@@ -8,6 +8,7 @@ const DEMO_PASS = "Fortechz@2026";
 
 const DESIGN_W = 1200;
 const DESIGN_H = 700;
+const CHROME_H = 150; // site header + glass frame padding + breathing room
 
 type PageId =
   | "dashboard" | "checkout" | "tables" | "preorders" | "menu" | "ingredients" | "suppliers"
@@ -959,7 +960,7 @@ function Login({ onSuccess }: { onSuccess: () => void }) {
 
 /* ─── Exported: scaled, glass-framed demo ───────────────────────────────────── */
 export default function PosDemo() {
-  const wrap = useRef<HTMLDivElement>(null);
+  const outer = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [authed, setAuthed] = useState(false);
   const [cfg, setCfg] = useState<Settings>(DEFAULTS);
@@ -984,23 +985,30 @@ export default function PosDemo() {
   const dark = cfg.theme === "system" ? sysDark : cfg.theme === "dark";
 
   useEffect(() => {
-    const el = wrap.current;
+    const el = outer.current;
     if (!el) return;
-    const update = () => setScale(Math.min(1, el.clientWidth / DESIGN_W));
+    // fit the 1200x700 design to the container width AND the window height,
+    // so the whole system is visible on laptop screens without scrolling
+    const update = () => {
+      const byWidth = (el.clientWidth - 40) / DESIGN_W;
+      const byHeight = Math.max(0.5, (window.innerHeight - CHROME_H) / DESIGN_H);
+      setScale(Math.min(1, byWidth, byHeight));
+    };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
-    return () => ro.disconnect();
+    window.addEventListener("resize", update);
+    return () => { ro.disconnect(); window.removeEventListener("resize", update); };
   }, []);
 
   return (
-    <div className="relative mx-auto max-w-[1280px]">
+    <div ref={outer} className="relative mx-auto max-w-[1280px]">
       {/* ambient glow behind the glass */}
       <div aria-hidden className="absolute -inset-6 rounded-[3rem] bg-[radial-gradient(ellipse_at_center,rgba(12,126,255,0.35),transparent_70%)] blur-2xl" />
       {/* glass frame */}
-      <div className="relative rounded-[2rem] p-3 sm:p-4 border border-pos/40 bg-pos/[0.12] backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(255,255,255,0.12),0_40px_90px_-20px_rgba(6,14,28,0.55),0_14px_30px_-10px_rgba(12,126,255,0.35)]">
+      <div className="relative mx-auto w-fit rounded-[2rem] p-3 sm:p-4 border border-pos/40 bg-pos/[0.12] backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(255,255,255,0.12),0_40px_90px_-20px_rgba(6,14,28,0.55),0_14px_30px_-10px_rgba(12,126,255,0.35)]">
         <div className="rounded-[1.4rem] overflow-hidden border border-black/40 shadow-[inset_0_2px_14px_rgba(0,0,0,0.7)]">
-          <div ref={wrap} className="w-full relative" style={{ height: DESIGN_H * scale }}>
+          <div className="relative" style={{ width: DESIGN_W * scale, height: DESIGN_H * scale }}>
             <SettingsCtx.Provider value={{ s: cfg, set: (patch) => save({ ...cfg, ...patch }), reset: () => save(DEFAULTS), dark }}>
               <div className={`absolute top-0 left-0 origin-top-left overflow-hidden ${dark ? "" : "pos-light"}`} style={{ width: DESIGN_W, height: DESIGN_H, transform: `scale(${scale})`, ...themeVars(dark ? "dark" : "light", cfg.accent) }}>
                 {authed ? <Shell onLogout={() => setAuthed(false)} /> : <Login onSuccess={() => setAuthed(true)} />}
