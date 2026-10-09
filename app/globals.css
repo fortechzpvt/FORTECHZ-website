@@ -208,3 +208,12 @@ html.dark {
   .btn-glass:active, .btn-glass-primary:active, .btn-glass-icon:active,
   .btn-glass-primary:hover { transform: none; }
 }
+
+/* POS demo: darker tint text on the bright theme */
+.pos-light .text-emerald-300 { color: #047857; }
+.pos-light .text-amber-300 { color: #b45309; }
+.pos-light .text-violet-300 { color: #6d28d9; }
+.pos-light .text-blue-300 { color: #1d4ed8; }
+.pos-light .text-rose-300 { color: #be123c; }
+.pos-light .text-rose-400 { color: #be123c; }
+.pos-scroll { scrollbar-width: thin; }

@@ -8,11 +8,11 @@ const data: ServiceDetailData = {
   titleLines: ["POS", "Systems"],
   tagline: "Custom point of sale software tailored to your retail or hospitality operation in Sri Lanka.",
   intro: [
-    "Fortechz builds custom POS systems for retail shops, restaurants, supermarkets, and pharmacies across Sri Lanka, designed around how your business actually operates, not a rigid off the shelf template.",
+    "Fortechz builds custom POS systems for retail shops, restaurants, supermarkets, and pharmacies across Sri Lanka, designed around how your business actually operates, not a rigid off the shelf template. Everything is fully customised to your preference, from the look and layout to roles, tax rates and reports.",
     "Every POS system we build includes real time inventory tracking, multi location and multi terminal support, and a reporting dashboard, so you always know what's selling, what's low, and what's owed.",
     "We also handle payment gateway integration so billing, cash, and card transactions flow through one system instead of three.",
   ],
-  features: ["Real time inventory tracking", "Multi location support", "Payment gateway integration", "Reporting dashboard"],
+  features: ["Real time inventory tracking", "Multi location support", "Payment gateway integration", "Reporting dashboard", "Income tax and VAT summaries", "Fully customisable to your preference"],
   faqs: [
     {
       question: "How much does a POS system cost in Sri Lanka?",
