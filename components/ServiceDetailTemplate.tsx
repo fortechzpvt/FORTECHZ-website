@@ -14,10 +14,11 @@ export type ServiceDetailData = {
   features: string[];
   faqs: ServiceFaq[];
   metaDescription: string;
+  demo?: { href: string; label: string };
 };
 
 export default function ServiceDetailTemplate({ data }: { data: ServiceDetailData }) {
-  const { index, slug, serviceType, titleLines, tagline, intro, features, faqs, metaDescription } = data;
+  const { index, slug, serviceType, titleLines, tagline, intro, features, faqs, metaDescription, demo } = data;
   const name = titleLines.join(" ");
 
   const jsonLdBlocks = [
@@ -71,6 +72,11 @@ export default function ServiceDetailTemplate({ data }: { data: ServiceDetailDat
             <p className="font-mono text-sm text-ink/55 leading-[1.9] anim-up" style={{ animationDelay: "0.22s" }}>
               {tagline}
             </p>
+            {demo && (
+              <div className="mt-6 anim-up" style={{ animationDelay: "0.3s" }}>
+                <Link href={demo.href} className="btn-glass-primary">{demo.label}</Link>
+              </div>
+            )}
           </div>
         </div>
       </section>
