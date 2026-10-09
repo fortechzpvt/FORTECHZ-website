@@ -27,6 +27,7 @@ const data: ServiceDetailData = {
       answer: "We can build offline first billing with local sync on reconnect for businesses in areas with unreliable internet, depending on your requirements, this is scoped during the initial consultation.",
     },
   ],
+  demo: { href: "/services/pos-systems/experience", label: "Experience the POS system" },
   metaDescription: "Custom POS systems for retail, restaurants, and pharmacies in Sri Lanka. Real time inventory, multi location support, and payment gateway integration.",
 };
 
