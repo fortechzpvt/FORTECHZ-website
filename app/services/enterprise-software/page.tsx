@@ -27,6 +27,7 @@ const data: ServiceDetailData = {
       answer: "Yes. Most enterprise projects involve integrating with existing databases, ERPs, or third party APIs. We design the integration layer as part of the initial architecture, not as an afterthought.",
     },
   ],
+  demo: { href: "/services/enterprise-software/experience", label: "Experience our SCM system" },
   metaDescription: "Mission critical enterprise software development in Sri Lanka. Cloud infrastructure, microservices architecture, CI/CD pipelines, and 99.99% uptime SLAs.",
 };
 

@@ -65,13 +65,13 @@ type Settings = {
   vat: number;
   incomeTax: number;
 };
-type AccentId = "blue" | "violet" | "emerald" | "rose" | "amber" | "cyan";
+export type AccentId = "blue" | "violet" | "emerald" | "rose" | "amber" | "cyan";
 
 const DEFAULTS: Settings = { theme: "dark", accent: "blue", textSize: 100, sidebar: "left", compact: false, name: "Fortechz", vat: 18, incomeTax: 15 };
 const STORE_KEY = "fortechz-pos-demo-settings";
 
 // rgb triples for Tailwind shades 300 / 400 / 500 / 600 / 700
-const ACCENTS: Record<AccentId, [string, string, string, string, string]> = {
+export const ACCENTS: Record<AccentId, [string, string, string, string, string]> = {
   blue: ["147 197 253", "96 165 250", "59 130 246", "37 99 235", "29 78 216"],
   violet: ["196 181 253", "167 139 250", "139 92 246", "124 58 237", "109 40 217"],
   emerald: ["110 231 183", "52 211 153", "16 185 129", "5 150 105", "4 120 87"],
@@ -80,7 +80,7 @@ const ACCENTS: Record<AccentId, [string, string, string, string, string]> = {
   cyan: ["103 232 249", "34 211 238", "6 182 212", "8 145 178", "14 116 144"],
 };
 
-function themeVars(theme: "dark" | "light", accent: AccentId): CSSProperties {
+export function themeVars(theme: "dark" | "light", accent: AccentId): CSSProperties {
   const a = ACCENTS[accent];
   const light = theme === "light";
   const t = light
@@ -153,9 +153,9 @@ const STAFF = [
 ];
 
 /* ─── Small building blocks ─────────────────────────────────────────────────── */
-const card = "rounded-2xl border border-pos/[0.06] bg-poscard";
+export const card = "rounded-2xl border border-pos/[0.06] bg-poscard";
 
-function Stat({ label, sub, value, tint, icon }: { label: string; sub?: string; value: string; tint: string; icon: string }) {
+export function Stat({ label, sub, value, tint, icon }: { label: string; sub?: string; value: string; tint: string; icon: string }) {
   return (
     <div className={`${card} p-4 flex-1 min-w-0`}>
       <div className="flex items-start justify-between">
@@ -170,7 +170,7 @@ function Stat({ label, sub, value, tint, icon }: { label: string; sub?: string; 
   );
 }
 
-function Pill({ children, tone = "slate" }: { children: ReactNode; tone?: "green" | "amber" | "violet" | "blue" | "slate" | "red" }) {
+export function Pill({ children, tone = "slate" }: { children: ReactNode; tone?: "green" | "amber" | "violet" | "blue" | "slate" | "red" }) {
   const tones = {
     green: "bg-emerald-500/15 text-emerald-300",
     amber: "bg-amber-500/15 text-amber-300",
@@ -185,7 +185,7 @@ function Pill({ children, tone = "slate" }: { children: ReactNode; tone?: "green
 const payTone = (p: string) =>
   p === "Cash" ? "green" : p === "Card" ? "blue" : p === "Uber Eats" ? "violet" : p === "PickMe" ? "amber" : "slate";
 
-function Btn({ children, primary, onDemo }: { children: ReactNode; primary?: boolean; onDemo: () => void }) {
+export function Btn({ children, primary, onDemo }: { children: ReactNode; primary?: boolean; onDemo: () => void }) {
   return (
     <button
       type="button"
@@ -199,7 +199,7 @@ function Btn({ children, primary, onDemo }: { children: ReactNode; primary?: boo
   );
 }
 
-function Table({ head, rows, empty }: { head: string[]; rows: ReactNode[][]; empty?: string }) {
+export function Table({ head, rows, empty }: { head: string[]; rows: ReactNode[][]; empty?: string }) {
   return (
     <div className="text-[10px]">
       <div className="grid px-3 py-2 text-[8px] uppercase tracking-wider text-pos/35 font-semibold" style={{ gridTemplateColumns: `repeat(${head.length}, minmax(0,1fr))` }}>
@@ -610,7 +610,7 @@ function Features({ go }: { go: (p: PageId) => void }) {
 }
 
 /* ─── Settings (everything here really works) ───────────────────────────────── */
-function Seg<T extends string | number>({ value, options, onChange }: { value: T; options: { v: T; label: string }[]; onChange: (v: T) => void }) {
+export function Seg<T extends string | number>({ value, options, onChange }: { value: T; options: { v: T; label: string }[]; onChange: (v: T) => void }) {
   return (
     <div className="inline-flex rounded-lg border border-pos/10 bg-posinset p-0.5 text-[10px]">
       {options.map((o) => (
@@ -620,7 +620,7 @@ function Seg<T extends string | number>({ value, options, onChange }: { value: T
   );
 }
 
-function Row({ label, hint, children }: { label: string; hint: string; children: ReactNode }) {
+export function Row({ label, hint, children }: { label: string; hint: string; children: ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-4 py-3 border-t border-pos/[0.06] first:border-t-0">
       <div className="min-w-0"><p className="text-[11px] font-semibold text-pos">{label}</p><p className="text-[9px] text-pos/40">{hint}</p></div>
