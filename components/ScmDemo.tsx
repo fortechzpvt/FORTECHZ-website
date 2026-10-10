@@ -129,7 +129,19 @@ const PRODUCTS: Product[] = [
   { sku: "SKU-1008", name: "Copper Cable 2.5mm 100m", cat: "Electrical", loc: "C-02-02", onHand: 96, reserved: 24, reorder: 40, cost: 14200, batch: "B-2410" },
 ];
 const CATEGORIES = ["All", ...Array.from(new Set(PRODUCTS.map((p) => p.cat)))];
-const stockOf = (p: Product) => { const a = p.onHand - p.reserved; return a <= 0 ? "Out" : a <= p.reorder ? "Low" : "OK"; };
+type Damage = { id: string; sku: string; qty: number; reason: string; by: string; date: string; action: string };
+const DAMAGE_SEED: Damage[] = [
+  { id: "DMG-231", sku: "SKU-1002", qty: 6, reason: "Crushed in transit", by: "A. Wijesinghe", date: "Oct 10", action: "Quarantined" },
+  { id: "DMG-230", sku: "SKU-1005", qty: 4, reason: "Container leak", by: "R. Kumar", date: "Oct 9", action: "Written off" },
+  { id: "DMG-229", sku: "SKU-1003", qty: 12, reason: "Supplier defect", by: "D. Fernando", date: "Oct 8", action: "Return to supplier" },
+  { id: "DMG-228", sku: "SKU-1006", qty: 15, reason: "Water damage", by: "A. Wijesinghe", date: "Oct 6", action: "Written off" },
+];
+const DAMAGE_REASONS = ["Crushed in transit", "Water damage", "Breakage while handling", "Container leak", "Expired", "Supplier defect"];
+const DAMAGE_ACTIONS = ["Quarantined", "Written off", "Return to supplier"];
+const damagedBy = (log: Damage[]) => log.reduce<Record<string, number>>((m, d) => ({ ...m, [d.sku]: (m[d.sku] ?? 0) + d.qty }), {});
+const SEED_DMG = damagedBy(DAMAGE_SEED);
+const availOf = (p: Product, dmg: Record<string, number> = SEED_DMG) => p.onHand - p.reserved - (dmg[p.sku] ?? 0);
+const stockOf = (p: Product, dmg: Record<string, number> = SEED_DMG) => { const a = availOf(p, dmg); return a <= 0 ? "Out" : a <= p.reorder ? "Low" : "OK"; };
 
 type PO = { id: number; supplier: string; value: number; items: number; by: string; due: string; status: "Pending approval" | "Approved" | "Sent" | "Partially received" | "Received" };
 const POS_SEED: PO[] = [
@@ -177,8 +189,8 @@ const AUDIT = [
 
 /* ─── Small helpers ─────────────────────────────────────────────────────────── */
 const GREEN = ["OK", "Approved", "Received", "Delivered", "Passed", "Closed", "Matched", "Completed", "Restocked", "Packed"];
-const AMBER = ["Low", "Pending approval", "Picking", "Reserved", "Dispatched", "Open", "Medium", "Sent", "Partially received", "Partially shipped", "In transit", "Inspecting", "Partial", "In progress"];
-const RED = ["Out", "Delayed", "Failed", "Backorder", "High", "Failed inspection", "Critical", "Price variance"];
+const AMBER = ["Low", "Pending approval", "Picking", "Reserved", "Dispatched", "Open", "Medium", "Sent", "Partially received", "Partially shipped", "In transit", "Inspecting", "Partial", "In progress", "Quarantined"];
+const RED = ["Out", "Delayed", "Failed", "Backorder", "High", "Failed inspection", "Critical", "Price variance", "Written off"];
 const tone = (s: string): "green" | "amber" | "red" | "slate" =>
   GREEN.includes(s) ? "green" : AMBER.includes(s) ? "amber" : RED.includes(s) ? "red" : "slate";
 
@@ -252,18 +264,20 @@ function Dashboard({ go, allowed }: { go: (p: PageId) => void; allowed: (p: Page
     { label: "Invoices Due", value: lkrShort(2_340_000), sub: "9 supplier invoices", to: "finance", icon: "▥", tint: "bg-amber-500/20 text-amber-300" },
     { label: "Outstanding Orders", value: "41", sub: "LKR 8.6M open", to: "orders", icon: "☷", tint: "bg-violet-500/20 text-violet-300" },
     { label: "Inventory Turnover", value: "6.4x", sub: "Estimated, annualised", to: "reports", icon: "↻", tint: "bg-emerald-500/20 text-emerald-300" },
+    { label: "Damaged Stock", value: `${DAMAGE_SEED.reduce((t, d) => t + d.qty, 0)} units`, sub: "Quarantined or written off", to: "inventory", icon: "⚠", tint: "bg-rose-500/20 text-rose-300" },
+    { label: "Open Returns", value: "4", sub: "Awaiting inspection", to: "quality", icon: "↺", tint: "bg-violet-500/20 text-violet-300" },
   ];
   return (
     <div className="space-y-3">
       <Note><b className="text-pos">Demo data.</b> Every card below opens its detailed page, and only shows what your role is permitted to see. Switch roles from the top bar to try it.</Note>
-      <div className="grid grid-cols-6 gap-2.5">
+      <div className="grid grid-cols-7 gap-2">
         {kpis.map((k) => {
           const ok = allowed(k.to);
           return (
             <button key={k.label} onClick={() => ok && go(k.to)} title={ok ? `Open ${TITLES[k.to][0]}` : "Not permitted for this role"}
               className={`${card} p-3 text-left transition-colors ${ok ? "hover:border-acc-500/50" : "opacity-45 cursor-not-allowed"}`}>
               <div className="flex justify-between items-start">
-                <p className="text-[10px] font-semibold text-pos/85">{k.label}</p>
+                <p className="text-[9px] font-semibold text-pos/85 truncate">{k.label}</p>
                 <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] ${k.tint}`}>{k.icon}</span>
               </div>
               <p className="text-[17px] font-bold text-pos mt-1.5 truncate">{k.value}</p>
@@ -302,7 +316,7 @@ function Dashboard({ go, allowed }: { go: (p: PageId) => void; allowed: (p: Page
           <div className="space-y-2">
             {PRODUCTS.filter((p) => stockOf(p) !== "OK").slice(0, 3).map((p) => (
               <div key={p.sku} className="flex items-center gap-2 rounded-xl bg-posinset border border-pos/[0.07] p-2">
-                <div className="flex-1 min-w-0"><p className="text-[10px] font-bold text-pos truncate">{p.name}</p><p className="text-[8px] text-pos/35">{p.onHand - p.reserved} available · reorder at {p.reorder}</p></div>
+                <div className="flex-1 min-w-0"><p className="text-[10px] font-bold text-pos truncate">{p.name}</p><p className="text-[8px] text-pos/35">{availOf(p)} available · reorder at {p.reorder}</p></div>
                 <Pill tone={tone(stockOf(p))}>{stockOf(p) === "Out" ? "Out" : "Low"}</Pill>
               </div>
             ))}
@@ -325,34 +339,86 @@ function Dashboard({ go, allowed }: { go: (p: PageId) => void; allowed: (p: Page
 
 /* ─── Inventory ─────────────────────────────────────────────────────────────── */
 function Inventory({ demo }: { demo: Act }) {
+  const { s } = useCfg();
+  const role = ROLES.find((r) => r.name === s.role) ?? ROLES[0];
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
+  const [log, setLog] = useState<Damage[]>(DAMAGE_SEED);
+  const [open, setOpen] = useState(false);
+  const [f, setF] = useState({ sku: PRODUCTS[0].sku, qty: 1, reason: DAMAGE_REASONS[0], action: DAMAGE_ACTIONS[0] });
+
+  const dmg = damagedBy(log);
   const rows = PRODUCTS.filter((p) => (cat === "All" || p.cat === cat) && `${p.name} ${p.sku}`.toLowerCase().includes(q.toLowerCase()));
   const val = PRODUCTS.reduce((t, p) => t + p.onHand * p.cost, 0);
+  const lost = log.reduce((t, d) => t + d.qty * (PRODUCTS.find((p) => p.sku === d.sku)?.cost ?? 0), 0);
+  const prod = PRODUCTS.find((p) => p.sku === f.sku) ?? PRODUCTS[0];
+  const maxQty = Math.max(0, availOf(prod, dmg));
+
+  const submit = () => {
+    if (role.readOnly) return demo("Read-only role: stock changes are not permitted");
+    if (f.qty < 1 || f.qty > maxQty) return demo(`Quantity must be between 1 and ${maxQty} available`);
+    const id = `DMG-${232 + log.length - DAMAGE_SEED.length}`;
+    setLog((l) => [{ id, sku: f.sku, qty: f.qty, reason: f.reason, by: role.name, date: "Today", action: f.action }, ...l]);
+    setOpen(false);
+    setF({ ...f, qty: 1 });
+    demo(`${id} recorded: ${f.qty} × ${prod.name}. Reason and user are saved to the audit log`);
+  };
+  const field = "rounded-lg bg-posinset border border-pos/10 px-2.5 py-1.5 text-[10px] text-pos outline-none focus:border-acc-500";
+
   return (
     <div className="space-y-3">
       <div className="flex gap-3">
         <Stat label="Stock Value" sub="At average cost" value={lkrShort(val)} tint="bg-acc-500/20 text-acc-300" icon="₨" />
         <Stat label="Units On Hand" sub="Sample of 8 SKUs" value={PRODUCTS.reduce((t, p) => t + p.onHand, 0).toLocaleString()} tint="bg-acc-500/20 text-acc-300" icon="▤" />
         <Stat label="Reserved" sub="Allocated to orders" value={PRODUCTS.reduce((t, p) => t + p.reserved, 0).toLocaleString()} tint="bg-violet-500/20 text-violet-300" icon="⚑" />
-        <Stat label="Needs Attention" sub="Low or out of stock" value={String(PRODUCTS.filter((p) => stockOf(p) !== "OK").length)} tint="bg-amber-500/20 text-amber-300" icon="!" />
+        <Stat label="Damaged Stock" sub={`${lkr(lost)} impact`} value={`${log.reduce((t, d) => t + d.qty, 0)} units`} tint="bg-rose-500/20 text-rose-300" icon="⚠" />
+        <Stat label="Needs Attention" sub="Low or out of stock" value={String(PRODUCTS.filter((p) => stockOf(p, dmg) !== "OK").length)} tint="bg-amber-500/20 text-amber-300" icon="!" />
       </div>
       <div className="flex gap-2 items-center">
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by product name or SKU, or scan a barcode…" className="flex-1 rounded-xl border border-pos/10 bg-posinset px-3 py-2 text-[11px] text-pos outline-none focus:border-acc-500" />
         <Seg value={cat} onChange={setCat} options={CATEGORIES.slice(0, 5).map((c) => ({ v: c, label: c }))} />
         <Btn onDemo={() => demo()}>Adjust Stock</Btn>
+        <Btn onDemo={() => setOpen((o) => !o)}>⚠ Report Damage</Btn>
         <Btn primary onDemo={() => demo()}>+ Receive Stock</Btn>
       </div>
       <div className={card}>
         <Table
-          head={["Product", "SKU", "Location", "On hand", "Reserved", "Available", "Batch", "Value", "Status"]}
+          head={["Product", "SKU", "Location", "On hand", "Reserved", "Damaged", "Available", "Value", "Status"]}
           empty="No products match your search."
           rows={rows.map((p) => [
-            <b key="n" className="text-pos">{p.name}</b>, p.sku, p.loc, p.onHand, p.reserved, p.onHand - p.reserved, p.batch, lkr(p.onHand * p.cost),
-            <Pill key="s" tone={tone(stockOf(p))}>{stockOf(p)}</Pill>,
+            <b key="n" className="text-pos">{p.name}</b>, p.sku, p.loc, p.onHand, p.reserved,
+            dmg[p.sku] ? <span key="d" className="text-rose-400 font-semibold">{dmg[p.sku]}</span> : <span key="d" className="text-pos/30">0</span>,
+            availOf(p, dmg), lkr(p.onHand * p.cost),
+            <Pill key="s" tone={tone(stockOf(p, dmg))}>{stockOf(p, dmg)}</Pill>,
           ])}
         />
       </div>
+      <Panel title="Damaged Stock & Products" sub="Every record keeps the reason, the user and the outcome"
+        right={<Btn primary onDemo={() => setOpen((o) => !o)}>{open ? "Cancel" : "+ Report Damage"}</Btn>}>
+        {open && (
+          <div className="flex flex-wrap items-end gap-2 rounded-xl border border-acc-500/30 bg-acc-500/10 p-3 mb-3">
+            <label className="text-[9px] text-pos/55">Product
+              <select value={f.sku} onChange={(e) => setF({ ...f, sku: e.target.value, qty: 1 })} className={`${field} block mt-1`}>{PRODUCTS.map((p) => <option key={p.sku} value={p.sku}>{p.name}</option>)}</select>
+            </label>
+            <label className="text-[9px] text-pos/55">Quantity (max {maxQty})
+              <input type="number" min={1} max={maxQty} value={f.qty} onChange={(e) => setF({ ...f, qty: Number(e.target.value) })} className={`${field} block mt-1 w-20`} />
+            </label>
+            <label className="text-[9px] text-pos/55">Reason
+              <select value={f.reason} onChange={(e) => setF({ ...f, reason: e.target.value })} className={`${field} block mt-1`}>{DAMAGE_REASONS.map((r) => <option key={r}>{r}</option>)}</select>
+            </label>
+            <label className="text-[9px] text-pos/55">Outcome
+              <select value={f.action} onChange={(e) => setF({ ...f, action: e.target.value })} className={`${field} block mt-1`}>{DAMAGE_ACTIONS.map((r) => <option key={r}>{r}</option>)}</select>
+            </label>
+            <Btn primary onDemo={submit}>Record damage</Btn>
+            <p className="text-[9px] text-pos/45 self-center">Removes the units from available stock. Recorded as {role.name}.</p>
+          </div>
+        )}
+        <Table head={["Ref", "Product", "Qty", "Reason", "Reported by", "Date", "Value", "Outcome"]}
+          rows={log.map((d) => {
+            const p = PRODUCTS.find((x) => x.sku === d.sku);
+            return [<b key="i" className="text-pos">{d.id}</b>, p?.name ?? d.sku, d.qty, d.reason, d.by, d.date, lkr(d.qty * (p?.cost ?? 0)), <Pill key="o" tone={tone(d.action)}>{d.action}</Pill>];
+          })} />
+      </Panel>
     </div>
   );
 }
@@ -394,6 +460,10 @@ function Warehouse({ demo }: { demo: Act }) {
             ]} />
         </Panel>
       </div>
+      <Panel title="Damaged Goods Handling" sub="Quarantine bay, write-offs and supplier returns" right={<Btn onDemo={() => demo()}>Report Damaged Goods</Btn>}>
+        <Table head={["Ref", "Product", "Qty", "Reason", "Outcome"]}
+          rows={DAMAGE_SEED.slice(0, 3).map((d) => [<b key="i" className="text-pos">{d.id}</b>, PRODUCTS.find((p) => p.sku === d.sku)?.name ?? d.sku, d.qty, d.reason, <Pill key="o" tone={tone(d.action)}>{d.action}</Pill>])} />
+      </Panel>
       <Panel title="Active Pick Lists" sub="Barcode scan confirms each pick" right={<Btn onDemo={() => demo()}>Print Packing Slips</Btn>}>
         <Table head={["Pick list", "Order", "Lines", "Picker", "Progress", "Status"]}
           rows={[
@@ -587,7 +657,7 @@ function Planning({ toast }: { toast: Act }) {
         right={<span className="text-[9px] text-pos/45">Sending to a supplier still needs approval</span>}>
         <Table head={["Product", "Available", "Reorder at", "Open demand", "Suggested qty", "Supplier", ""]}
           rows={PRODUCTS.filter((p) => stockOf(p) !== "OK").map((p) => [
-            <b key="n" className="text-pos">{p.name}</b>, p.onHand - p.reserved, p.reorder, p.reserved + 20, p.reorder * 2,
+            <b key="n" className="text-pos">{p.name}</b>, availOf(p), p.reorder, p.reserved + 20, p.reorder * 2,
             SUPPLIERS[p.sku.length % SUPPLIERS.length].n,
             <Btn key="b" primary onDemo={() => toast(`Draft ${s.poPrefix} created for ${p.name}. It needs approval before sending`)}>Draft PO</Btn>,
           ])} />
@@ -782,6 +852,7 @@ function Notifications() {
     { id: 2, sev: "High", t: "Shipment SHP-8840 delayed", m: "Rapid Courier reports a 1 day delay to Kandy", ack: false },
     { id: 3, sev: "Medium", t: "PO-4411 needs approval", m: "LKR 1,240,000 · above officer limit", ack: false },
     { id: 4, sev: "Medium", t: "GRN-3109 discrepancy", m: "120 of 200 received, 80 remain open", ack: false },
+    { id: 6, sev: "High", t: "Damaged stock reported", m: "DMG-231 · 6 × Safety Helmet quarantined (crushed in transit)", ack: false },
     { id: 5, sev: "Low", t: "Supplier certificate expiring", m: "Hardware Hub ISO cert expires in 21 days", ack: true },
   ]);
   return (
