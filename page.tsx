@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Marquee from "@/components/Marquee";
 
 const values = [
   {
@@ -80,8 +79,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Marquee */}
-      <Marquee />
 
       {/* Manifesto */}
       <section className="px-6 md:px-10 lg:px-16 py-16 border-b border-ink/10 grid grid-cols-1 md:grid-cols-12 gap-10">

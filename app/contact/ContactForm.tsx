@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Marquee from "@/components/Marquee";
 
 const budgetOptions = ["LKR25,000 to LKR50,000", "LKR50,000 to LKR300,000", "LKR300,000+", "Let's discuss"];
 const serviceOptions = ["Basic Business Website","POS System","Ecommerce Platform","Web & Mobile Development","Custom Website Design & Build","Enterprise Software","Not sure yet"];
@@ -64,8 +63,6 @@ export default function ContactForm() {
         </div>
       </section>
 
-      {/* Marquee */}
-      <Marquee />
 
       <div className="px-6 md:px-10 lg:px-16 py-16 grid grid-cols-1 lg:grid-cols-12 gap-16">
 

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import Link from "next/link";
-import Marquee from "@/components/Marquee";
 
 export const metadata: Metadata = {
   title: "Our Work | Client Projects | Fortechz",
@@ -119,8 +118,6 @@ export default function WorkPage() {
         </div>
       </section>
 
-      {/* Marquee */}
-      <Marquee />
 
       {/* Projects List */}
       <section className="px-6 md:px-10 lg:px-16 py-4">
