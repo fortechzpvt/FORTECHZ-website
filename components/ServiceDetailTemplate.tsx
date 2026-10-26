@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Marquee from "@/components/Marquee";
 import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from "@/lib/seo";
 
 export type ServiceFaq = { question: string; answer: string };
@@ -81,7 +80,6 @@ export default function ServiceDetailTemplate({ data }: { data: ServiceDetailDat
         </div>
       </section>
 
-      <Marquee />
 
       {/* Intro copy */}
       <section className="px-6 md:px-10 lg:px-16 py-16 border-b border-ink/10 grid grid-cols-1 md:grid-cols-12 gap-10">

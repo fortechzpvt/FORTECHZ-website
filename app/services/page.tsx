@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import Link from "next/link";
-import Marquee from "@/components/Marquee";
 
 const services = [
   {
@@ -88,8 +87,6 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Marquee */}
-      <Marquee />
 
       {/* Services grid */}
       <section className="px-6 md:px-10 lg:px-16 py-16">
